@@ -8,8 +8,10 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import cacao.friends.shop.modules.address.Address;
+import cacao.friends.shop.modules.tag.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -47,6 +49,9 @@ public class Account {
 	private boolean itemCreatedByEmail;	// 선호 캐릭터 이메일 알림 여부
 	
 	private boolean itemCreatedByWeb;	// 선호 캐릭터 웹 알림 여부
+	
+	@ManyToOne
+	private Tag pickTag;	// 선호 캐릭터
 	
 	//===비즈니스 로직===//
 	public void generateEmailToken() {
