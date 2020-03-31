@@ -54,16 +54,19 @@ public class Account {
 	private Tag pickTag;	// 선호 캐릭터
 	
 	//===비즈니스 로직===//
+	// 토큰 발급
 	public void generateEmailToken() {
 		this.emailCheckToken = UUID.randomUUID().toString();
 		this.emailCheckTokenGeneratedAt = LocalDateTime.now();
 	}
 	
+	// 토큰 인증 성공
 	public void completeJoin() {
 		this.joinedAt = LocalDateTime.now();
 		this.emailVerified = true;
 	}
 	
+	// 주소 변경
 	public void updateAddress(String city, String street, String zipcode, String etc) {
 		this.address = new Address(city, street, zipcode, etc);
 	}
