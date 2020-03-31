@@ -3,12 +3,12 @@ package cacao.friends.shop.modules.category;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PostPersist;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +31,7 @@ public class Category {
 	@Column
 	private Long parentCategoryId;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@Builder.Default
 	private Set<Category> childCategorys = new HashSet<>();
 	
@@ -45,15 +45,12 @@ public class Category {
 	// 하위 카테고리 삭제
 	public void removeChildCategory(Category childCategory) {
 		this.childCategorys.remove(childCategory);
-		childCategory.parentCategoryId = this.id;
+		childCategory.parentCategoryId = childCategory.id;
 	}
 	
-	@PostPersist
-	public void postPersist() {
-		if(this.parentCategoryId == null) {
-			this.parentCategoryId = id;
-		}
-	}
-	
+	// 상위 카테고리 확인
+	public boolean isParentCategory() {
+		return this.id == this.parentCategoryId || this.id != 0;
+	}	
 	
 }
