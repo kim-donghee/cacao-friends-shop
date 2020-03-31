@@ -66,6 +66,11 @@ public class Account {
 		this.emailVerified = true;
 	}
 	
+	// 토큰 인증
+	public boolean isValidToken(String token) {
+		return this.emailCheckToken.equals(token);
+	}
+	
 	// 주소 변경
 	public void updateAddress(String city, String street, String zipcode, String etc) {
 		this.address = new Address(city, street, zipcode, etc);
