@@ -28,8 +28,9 @@ public class Category {
 	@Column(unique = true, nullable = false, length = 20)
 	private String name;
 	
-	@Column
-	private Long parentCategoryId;
+	@Column(nullable = false)
+	@Builder.Default
+	private Long parentCategoryId = 0L;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	@Builder.Default
@@ -45,12 +46,12 @@ public class Category {
 	// 하위 카테고리 삭제
 	public void removeChildCategory(Category childCategory) {
 		this.childCategorys.remove(childCategory);
-		childCategory.parentCategoryId = childCategory.id;
+		childCategory.parentCategoryId = 0L;
 	}
 	
 	// 상위 카테고리 확인
 	public boolean isParentCategory() {
-		return this.id == this.parentCategoryId || this.id != 0;
+		return this.parentCategoryId == 0L;
 	}	
 	
 }
