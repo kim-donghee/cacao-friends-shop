@@ -1,6 +1,7 @@
 package cacao.friends.shop.modules.account.category;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,6 +35,7 @@ public class CategoryRepositoryTest {
 				.build();
 		
 		categoryRepository.save(category1);
+		categoryRepository.save(category2);
 		
 		em.flush();
 		
@@ -42,8 +44,8 @@ public class CategoryRepositoryTest {
 		em.flush();
 		em.clear();
 		
-		assertEquals(category1.getParentCategoryId(), 0L);
-		assertEquals(category2.getParentCategoryId(), 1L);
+		assertNull(category1.getParentCategory());
+		assertEquals(category2.getParentCategory().getId(), 1L);
 		
 		Category findCategory1 = categoryRepository.findById(1L).get();
 		Category findCategory2 = categoryRepository.findById(2L).get();
@@ -53,8 +55,8 @@ public class CategoryRepositoryTest {
 		em.flush();
 		em.clear();
 		
-		assertEquals(findCategory1.getParentCategoryId(), 0L);
-		assertEquals(findCategory2.getParentCategoryId(), 0L);
+		assertNull(findCategory1.getParentCategory());
+		assertNull(findCategory2.getParentCategory());
 	}
 
 }
