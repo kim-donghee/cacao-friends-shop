@@ -24,7 +24,7 @@ public class AccountTest {
 				.build();
 		account.generateEmailToken();
 		account.completeJoin();
-		account.updateAddress("city", "street", "zipcode", "etc");
+//		account.updateAddress("city", "street", "zipcode", "etc");
 		
 		assertTrue(account.isEmailVerified());
 	}
@@ -40,7 +40,7 @@ public class AccountTest {
 				.build();
 		account.generateEmailToken();
 //		account.completeJoin();
-		account.updateAddress("city", "street", "zipcode", "etc");
+//		account.updateAddress("city", "street", "zipcode", "etc");
 		
 		assertFalse(account.isEmailVerified());
 	}

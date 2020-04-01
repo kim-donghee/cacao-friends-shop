@@ -12,15 +12,17 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import cacao.friends.shop.modules.address.Address;
+import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.tag.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Getter @EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = "id")
 @NoArgsConstructor @AllArgsConstructor @Builder 
 public class Account {
 	
@@ -47,9 +49,11 @@ public class Account {
 	
 	private boolean emailVerified;		// 이메일 인증 여부
 	
-	private boolean itemCreatedByEmail;	// 선호 캐릭터 이메일 알림 여부
+	@Builder.Default
+	private boolean itemCreatedByEmail	= false; // 선호 캐릭터 이메일 알림 여부
 	
-	private boolean itemCreatedByWeb;	// 선호 캐릭터 웹 알림 여부
+	@Builder.Default
+	private boolean itemCreatedByWeb = true;	// 선호 캐릭터 웹 알림 여부
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Tag pickTag;	// 선호 캐릭터
@@ -73,8 +77,9 @@ public class Account {
 	}
 	
 	// 주소 변경
-	public void updateAddress(String city, String street, String zipcode, String etc) {
-		this.address = new Address(city, street, zipcode, etc);
+	public void updateAddress(AddressForm addressForm) {
+		this.address = new Address(addressForm.getCity(), 
+				addressForm.getStreet(), addressForm.getZipcode(), addressForm.getEtc());
 	}
 	
 }
