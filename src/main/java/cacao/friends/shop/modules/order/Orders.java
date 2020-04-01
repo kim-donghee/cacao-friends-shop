@@ -78,7 +78,7 @@ public class Orders {
 		String firstItemName = ordersItem.getItemName();
 		
 		if(itemCount > 1) {
-			this.name = firstItemName + " 외 " + itemCount;
+			this.name = firstItemName + " 외 " + itemCount + " 개";
 		}
 		else {
 			this.name = firstItemName;

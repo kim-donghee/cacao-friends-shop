@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -38,11 +39,11 @@ public class Account {
 	@Embedded
 	private Address address;
 	
-	private LocalDateTime joinedAt;	// 가입 이메일 인증 시간
+	private LocalDateTime joinedAt;	// 가입 이메일 인증 일시
 	
 	private String emailCheckToken;	// 이메일 인증 토큰
 	
-	private LocalDateTime emailCheckTokenGeneratedAt; // 이메일 검증 토큰 발급 시간
+	private LocalDateTime emailCheckTokenGeneratedAt; // 이메일 검증 토큰 발급 일시
 	
 	private boolean emailVerified;		// 이메일 인증 여부
 	
@@ -50,7 +51,7 @@ public class Account {
 	
 	private boolean itemCreatedByWeb;	// 선호 캐릭터 웹 알림 여부
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Tag pickTag;	// 선호 캐릭터
 	
 	//===비즈니스 로직===//
