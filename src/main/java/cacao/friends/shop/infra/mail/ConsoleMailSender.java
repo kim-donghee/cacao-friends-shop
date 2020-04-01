@@ -1,4 +1,4 @@
-package cacao.friends.shop.infra.config.mail;
+package cacao.friends.shop.infra.mail;
 
 import java.io.InputStream;
 
