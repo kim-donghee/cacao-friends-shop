@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.account.category;
+package cacao.friends.shop.modules.category;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
