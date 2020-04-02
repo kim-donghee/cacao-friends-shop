@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Profile("local")
+@Profile({"local", "dev"})
 @Component
 public class ConsoleMailSender implements JavaMailSender {
 
