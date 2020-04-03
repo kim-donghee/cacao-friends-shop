@@ -5,7 +5,11 @@ import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class TagName {
+public class NotificationsForm {
+	
+	private boolean itemCreatedByEmail;
+	
+	private boolean itemCreatedByWeb;
 	
 	@NotBlank
 	private String tagName;

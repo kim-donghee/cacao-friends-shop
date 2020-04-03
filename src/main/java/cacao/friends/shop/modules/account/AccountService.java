@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.modules.account.form.JoinForm;
-import cacao.friends.shop.modules.account.form.Notifications;
+import cacao.friends.shop.modules.account.form.NotificationsForm;
 import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.tag.Tag;
 import lombok.RequiredArgsConstructor;
@@ -90,13 +90,13 @@ public class AccountService  implements UserDetailsService {
 		accountRepository.save(account);
 	}
 	
-	public void updatePassword(Account account, String password) {
-		account.setPassword(password);
+	public void updatePassword(Account account, String newPassword) {
+		account.setPassword(passwordEncoder.encode(newPassword));
 		accountRepository.save(account);
 	}
 	
-	public void updateNotifications(Account account, Tag pickTag, Notifications notifications) {
-		modelMapper.map(notifications, account);
+	public void updateNotifications(Account account, Tag pickTag, NotificationsForm notificationsForm) {
+		modelMapper.map(notificationsForm, account);
 		account.setPickTag(pickTag);
 		accountRepository.save(account);
 	}
