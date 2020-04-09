@@ -10,5 +10,10 @@ public class MainController {
 	public String home() {
 		return "account/index";
 	}
+	
+	@GetMapping("/manager")
+	public String managerHome() {
+		return "manager/index";
+	}
 
 }

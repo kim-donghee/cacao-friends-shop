@@ -6,4 +6,6 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
 	Tag findByName(String name);
 
+	boolean existsByName(String name);
+
 }
