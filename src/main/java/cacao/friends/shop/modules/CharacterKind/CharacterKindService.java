@@ -1,37 +1,37 @@
-package cacao.friends.shop.modules.tag;
+package cacao.friends.shop.modules.CharacterKind;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cacao.friends.shop.modules.tag.form.TagForm;
+import cacao.friends.shop.modules.CharacterKind.form.CharacterForm;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TagService {
+public class CharacterKindService {
 	
-	private final TagRepository tagRepository;
+	private final CharacterKindRepository tagRepository;
 	
 	private final ModelMapper modelMapper;
 	
-	public void createTag(TagForm tagForm) {
-		Tag tag = modelMapper.map(tagForm, Tag.class);
+	public void createCharacter(CharacterForm form) {
+		CharacterKind tag = modelMapper.map(form, CharacterKind.class);
 		tagRepository.save(tag);
 	}
 	
-	public void updateTag(Tag tag, TagForm tagForm) {
-		modelMapper.map(tagForm, tag);		
+	public void updateCharacter(CharacterKind character, CharacterForm form) {
+		modelMapper.map(form, character);		
 	}
 
-	public void removeTag(Tag tag) {
-		tagRepository.delete(tag);
+	public void removeCharacter(CharacterKind character) {
+		tagRepository.delete(character);
 	}
 	
-	public boolean isValid(TagForm tagForm) {
-		String name = tagForm.getName();
-		String image = tagForm.getImage();
+	public boolean isValid(CharacterForm form) {
+		String name = form.getName();
+		String image = form.getImage();
 		
 		int nameLength = name.length();
 		

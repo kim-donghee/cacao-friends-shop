@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.tag;
+package cacao.friends.shop.modules.CharacterKind;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,12 +16,12 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @NoArgsConstructor @AllArgsConstructor @Builder 
-public class Tag {
+public class CharacterKind {
 	
 	@Id @GeneratedValue
 	private Long id;
 	
-	@Column(unique = true, nullable = false, length = 20)
+	@Column(nullable = false, length = 20)
 	private String name;
 	
 	@Lob

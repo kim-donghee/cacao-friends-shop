@@ -1,10 +1,10 @@
-package cacao.friends.shop.modules.tag;
+package cacao.friends.shop.modules.CharacterKind;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TagRepository extends JpaRepository<Tag, Long> {
+public interface CharacterKindRepository extends JpaRepository<CharacterKind, Long> {
 
-	Tag findByName(String name);
+	CharacterKind findByName(String name);
 
 	boolean existsByName(String name);
 

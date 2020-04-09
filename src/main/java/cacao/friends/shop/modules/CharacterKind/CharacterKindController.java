@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.tag;
+package cacao.friends.shop.modules.CharacterKind;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
@@ -10,91 +10,67 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import cacao.friends.shop.modules.tag.form.TagForm;
+import cacao.friends.shop.modules.CharacterKind.form.CharacterForm;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/manager/tag")
+@RequestMapping("/manager/character")
 @RequiredArgsConstructor
-public class TagController {
+public class CharacterKindController {
 	
-	private final TagRepository tagRepository;
+	private final CharacterKindRepository characterRepository;
 	
-	private final TagService tagService;
+	private final CharacterKindService characterService;
 	
-	private String redirectView = "redirect:/manager/tag";
+	private String redirectView = "redirect:/manager/character";
 	
 	private String validMessage = " 2글자에서 50글자의 이름과 이미지를 반드시 필요합니다.";
 	
-	private String duplicateMessage = " 캐릭터 이름이 이미 사용중입니다.";
-	
 	@GetMapping
-	public String tagView(Model model) {
-		model.addAttribute("tagList", tagRepository.findAll(Sort.by(Order.desc("id"))));
-		return "manager/tag/index";
+	public String characterView(Model model) {
+		model.addAttribute("characterList", characterRepository.findAll(Sort.by(Order.desc("id"))));
+		return "manager/character/index";
 	}
 	
 	@PostMapping("/add")
-	public String createTag(TagForm tagForm, RedirectAttributes attributes) {
-		String failMessage = "태그 저장에 실패했습니다.";
+	public String createTag(CharacterForm form, RedirectAttributes attributes) {
+		String failMessage = "캐릭터 저장에 실패했습니다.";
 		
-		if(!tagService.isValid(tagForm)) {
+		if(!characterService.isValid(form)) {
 			attributes.addFlashAttribute("error", failMessage + validMessage);
 			return redirectView;
 		}
 		
-		if(tagRepository.existsByName(tagForm.getName())) {
-			attributes.addFlashAttribute("error", failMessage + duplicateMessage);
-			return redirectView;
-		}
+		characterService.createCharacter(form);
 		
-		tagService.createTag(tagForm);
-		
-		attributes.addFlashAttribute("message", "태그를 저장했습니다.");
+		attributes.addFlashAttribute("message", "캐릭터를 저장했습니다.");
 		return redirectView;
 	}
 	
-	@PostMapping("/{name}/update")
-	public String updateTag(@PathVariable String name, TagForm tagForm, RedirectAttributes attributes) {
-		String failMessage = "태그 저장에 실패했습니다.";
+	@PostMapping("/{id}/update")
+	public String updateTag(@PathVariable Long id, CharacterForm form, RedirectAttributes attributes) {
+		String failMessage = "캐릭터 수정에 실패했습니다.";
 		
-		if(!tagService.isValid(tagForm)) {
+		if(!characterService.isValid(form)) {
 			attributes.addFlashAttribute("error", failMessage + validMessage);
 			return redirectView;
 		}
 		
-		Tag tag = tagRepository.findByName(name);
+		CharacterKind character = characterRepository.findById(id).orElseThrow();
 		
-		if(tag == null) {
-			attributes.addFlashAttribute("error", failMessage);
-			return redirectView;
-		}
+		characterService.updateCharacter(character, form);
 		
-		if(tagRepository.existsByName(tagForm.getName())) {
-			if(!name.equals(tagForm.getName())) {
-				attributes.addFlashAttribute("error", failMessage + duplicateMessage);
-				return redirectView;
-			}
-		}
-		
-		tagService.updateTag(tag, tagForm);
-		
-		attributes.addFlashAttribute("message", "태그를 수정했습니다.");
+		attributes.addFlashAttribute("message", "캐릭터를 수정했습니다.");
 		return redirectView;
 	}
 	
-	@PostMapping("/{name}/remove")
-	public String updateTag(@PathVariable String name, RedirectAttributes attributes) {
-		Tag tag = tagRepository.findByName(name);
+	@PostMapping("/{id}/remove")
+	public String updateTag(@PathVariable Long  id, RedirectAttributes attributes) {
+		CharacterKind character = characterRepository.findById(id).orElseThrow();
 		
-		if(tag == null) {
-			attributes.addFlashAttribute("error", "태그 삭제에 실패했습니다.");
-			return redirectView;
-		}
+		characterService.removeCharacter(character);
 		
-		tagService.removeTag(tag);
-		
-		attributes.addFlashAttribute("message", "태그를 삭제했습니다.");
+		attributes.addFlashAttribute("message", "캐릭터를 삭제했습니다.");
 		return redirectView;
 	}
 	
