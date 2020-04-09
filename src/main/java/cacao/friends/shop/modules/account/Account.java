@@ -11,9 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import cacao.friends.shop.modules.CharacterKind.CharacterKind;
 import cacao.friends.shop.modules.address.Address;
 import cacao.friends.shop.modules.address.form.AddressForm;
-import cacao.friends.shop.modules.tag.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -56,7 +56,7 @@ public class Account {
 	private boolean itemCreatedByWeb = true;	// 선호 캐릭터 웹 알림 여부
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Tag pickTag;	// 선호 캐릭터
+	private CharacterKind pickTag;	// 선호 캐릭터
 	
 	//===비즈니스 로직===//
 	// 토큰 발급

@@ -16,10 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cacao.friends.shop.modules.CharacterKind.CharacterKind;
 import cacao.friends.shop.modules.account.form.JoinForm;
 import cacao.friends.shop.modules.account.form.NotificationsForm;
 import cacao.friends.shop.modules.address.form.AddressForm;
-import cacao.friends.shop.modules.tag.Tag;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -95,7 +95,7 @@ public class AccountService  implements UserDetailsService {
 		accountRepository.save(account);
 	}
 	
-	public void updateNotifications(Account account, Tag pickTag, NotificationsForm notificationsForm) {
+	public void updateNotifications(Account account, CharacterKind pickTag, NotificationsForm notificationsForm) {
 		modelMapper.map(notificationsForm, account);
 		account.setPickTag(pickTag);
 		accountRepository.save(account);

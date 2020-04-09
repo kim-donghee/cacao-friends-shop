@@ -16,9 +16,9 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import cacao.friends.shop.modules.CharacterKind.CharacterKind;
 import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.item.exception.NotEnoughStockException;
-import cacao.friends.shop.modules.tag.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -56,7 +56,7 @@ public class Item {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = true)
-	private Tag tag;
+	private CharacterKind tag;
 	
 	@OneToMany
 	@Builder.Default

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import cacao.friends.shop.modules.CharacterKind.CharacterKind;
+import cacao.friends.shop.modules.CharacterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.account.form.NotificationsForm;
 import cacao.friends.shop.modules.account.form.PasswordForm;
 import cacao.friends.shop.modules.account.validator.PasswordFormValidator;
 import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.main.CurrentAccount;
-import cacao.friends.shop.modules.tag.Tag;
-import cacao.friends.shop.modules.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -33,7 +33,7 @@ public class SettingAccountController {
 	
 	private final PasswordFormValidator passwordFormValidator;
 	
-	private final TagRepository tagRepository;
+	private final CharacterKindRepository tagRepository;
 	
 	private final ModelMapper modelMapper;
 	
@@ -101,7 +101,7 @@ public class SettingAccountController {
 			return "account/settings/notifications";
 		}
 		
-		Tag tag = tagRepository.findByName(notificationsForm.getTagName());
+		CharacterKind tag = tagRepository.findByName(notificationsForm.getTagName());
 		
 		accountService.updateNotifications(account, tag, notificationsForm);
 		
