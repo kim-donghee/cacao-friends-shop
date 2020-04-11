@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.CharacterKind.form;
+package cacao.friends.shop.modules.characterKind.form;
 
 import javax.validation.constraints.NotBlank;
 

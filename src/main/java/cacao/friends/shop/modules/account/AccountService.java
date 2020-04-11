@@ -16,10 +16,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cacao.friends.shop.modules.CharacterKind.CharacterKind;
 import cacao.friends.shop.modules.account.form.JoinForm;
 import cacao.friends.shop.modules.account.form.NotificationsForm;
 import cacao.friends.shop.modules.address.form.AddressForm;
+import cacao.friends.shop.modules.characterKind.CharacterKind;
 import lombok.RequiredArgsConstructor;
 
 @Service

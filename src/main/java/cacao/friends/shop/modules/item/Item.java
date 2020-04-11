@@ -16,8 +16,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import cacao.friends.shop.modules.CharacterKind.CharacterKind;
 import cacao.friends.shop.modules.category.Category;
+import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.exception.NotEnoughStockException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

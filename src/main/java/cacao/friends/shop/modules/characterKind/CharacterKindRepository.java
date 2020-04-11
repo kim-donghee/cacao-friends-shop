@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.CharacterKind;
+package cacao.friends.shop.modules.characterKind;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

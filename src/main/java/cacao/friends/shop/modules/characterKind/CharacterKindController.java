@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.CharacterKind;
+package cacao.friends.shop.modules.characterKind;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import cacao.friends.shop.modules.CharacterKind.form.CharacterForm;
+import cacao.friends.shop.modules.characterKind.form.CharacterForm;
 import lombok.RequiredArgsConstructor;
 
 @Controller

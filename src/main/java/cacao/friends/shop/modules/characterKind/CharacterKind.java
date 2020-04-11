@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.CharacterKind;
+package cacao.friends.shop.modules.characterKind;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

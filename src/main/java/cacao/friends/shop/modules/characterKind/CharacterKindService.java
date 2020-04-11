@@ -1,10 +1,10 @@
-package cacao.friends.shop.modules.CharacterKind;
+package cacao.friends.shop.modules.characterKind;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cacao.friends.shop.modules.CharacterKind.form.CharacterForm;
+import cacao.friends.shop.modules.characterKind.form.CharacterForm;
 import lombok.RequiredArgsConstructor;
 
 @Service

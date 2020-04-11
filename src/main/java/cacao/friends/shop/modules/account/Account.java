@@ -11,9 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import cacao.friends.shop.modules.CharacterKind.CharacterKind;
 import cacao.friends.shop.modules.address.Address;
 import cacao.friends.shop.modules.address.form.AddressForm;
+import cacao.friends.shop.modules.characterKind.CharacterKind;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

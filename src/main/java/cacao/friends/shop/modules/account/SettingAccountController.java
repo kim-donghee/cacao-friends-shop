@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import cacao.friends.shop.modules.CharacterKind.CharacterKind;
-import cacao.friends.shop.modules.CharacterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.account.form.NotificationsForm;
 import cacao.friends.shop.modules.account.form.PasswordForm;
 import cacao.friends.shop.modules.account.validator.PasswordFormValidator;
 import cacao.friends.shop.modules.address.form.AddressForm;
+import cacao.friends.shop.modules.characterKind.CharacterKind;
+import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.main.CurrentAccount;
 import lombok.RequiredArgsConstructor;
 
