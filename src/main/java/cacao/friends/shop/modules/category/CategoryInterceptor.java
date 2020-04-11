@@ -22,9 +22,12 @@ public class CategoryInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		if(MediaType.APPLICATION_JSON_VALUE.equals(request.getContentType())) {
+		if(modelAndView == null)
 			return;
-		}
+		
+		if(MediaType.APPLICATION_JSON_VALUE.equals(request.getContentType()))
+			return;
+		
 		
 		if(!isRedirectView(modelAndView) && isAccountView(modelAndView)) {
 			List<Category> categoryLsit = categoryRepository.findByParentCategoryIsNull();
