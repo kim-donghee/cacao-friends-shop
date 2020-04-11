@@ -25,7 +25,7 @@ public class Category {
 	@Id @GeneratedValue
 	private Long id;
 	
-	@Column(unique = true, nullable = false, length = 20)
+	@Column(nullable = false, length = 50)
 	private String name;
 	
 	@ManyToOne

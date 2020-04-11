@@ -33,7 +33,7 @@ public class SettingAccountController {
 	
 	private final PasswordFormValidator passwordFormValidator;
 	
-	private final CharacterKindRepository tagRepository;
+	private final CharacterKindRepository characterKindRepository;
 	
 	private final ModelMapper modelMapper;
 	
@@ -88,7 +88,7 @@ public class SettingAccountController {
 	@GetMapping("/notifications")
 	public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
 		model.addAttribute(modelMapper.map(account, NotificationsForm.class));
-		model.addAttribute("tagList", tagRepository.findAll());
+		model.addAttribute("tagList", characterKindRepository.findAll());
 		return "account/settings/notifications";
 	}
 	
@@ -101,7 +101,7 @@ public class SettingAccountController {
 			return "account/settings/notifications";
 		}
 		
-		CharacterKind tag = tagRepository.findByName(notificationsForm.getTagName());
+		CharacterKind tag = characterKindRepository.findByName(notificationsForm.getTagName());
 		
 		accountService.updateNotifications(account, tag, notificationsForm);
 		

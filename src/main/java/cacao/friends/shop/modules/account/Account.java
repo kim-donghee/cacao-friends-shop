@@ -56,7 +56,7 @@ public class Account {
 	private boolean itemCreatedByWeb = true;	// 선호 캐릭터 웹 알림 여부
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	private CharacterKind pickTag;	// 선호 캐릭터
+	private CharacterKind pickCharacter;	// 선호 캐릭터
 	
 	//===비즈니스 로직===//
 	// 토큰 발급

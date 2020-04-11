@@ -95,9 +95,9 @@ public class AccountService  implements UserDetailsService {
 		accountRepository.save(account);
 	}
 	
-	public void updateNotifications(Account account, CharacterKind pickTag, NotificationsForm notificationsForm) {
+	public void updateNotifications(Account account, CharacterKind pickCharacter, NotificationsForm notificationsForm) {
 		modelMapper.map(notificationsForm, account);
-		account.setPickTag(pickTag);
+		account.setPickCharacter(pickCharacter);
 		accountRepository.save(account);
 	}
 	

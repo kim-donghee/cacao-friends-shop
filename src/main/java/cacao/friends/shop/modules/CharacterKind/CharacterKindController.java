@@ -32,7 +32,7 @@ public class CharacterKindController {
 		return "manager/character/index";
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("/save")
 	public String createTag(CharacterForm form, RedirectAttributes attributes) {
 		String failMessage = "캐릭터 저장에 실패했습니다.";
 		
