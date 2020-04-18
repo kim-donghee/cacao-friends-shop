@@ -1,12 +1,11 @@
 package cacao.friends.shop.modules.item;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -34,7 +33,8 @@ public class Item {
 	@Id @GeneratedValue
 	private Long id;
 	
-	@Column(unique = true, nullable = false, length = 50)
+	//=== 기본 정보 ===//
+	@Column(nullable = false, length = 20)
 	private String name;
 	
 	@Builder.Default
@@ -49,18 +49,42 @@ public class Item {
 	@Column(nullable = false)
 	private String detail;
 	
-	@Lob
-	@ElementCollection
-	@Builder.Default
-	private List<String> titleImages = new ArrayList<>();
+	@Column(nullable = false, length = 100)
+	private String shortDescript;
 	
+	//=== 배너  ===//
+	@Lob
+	private String mainBanner;
+	
+	@Builder.Default
+	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<ItemBanner> banners = new HashSet<>();
+	
+	//=======//
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = true)
-	private CharacterKind tag;
+	private CharacterKind character;
 	
 	@OneToMany
 	@Builder.Default
 	private Set<Category> categorys = new HashSet<>();
+	
+	//=== 상품 상태 ===//
+	@Builder.Default
+	private boolean published = false;	// 공개 여부
+	
+	@Builder.Default
+	private boolean paused = false;		// 일시 정지 여부
+	
+	@Builder.Default
+	private boolean closed = false;		// 종료 여부
+	
+	private LocalDateTime publishedDateTime;	// 상품 공개 일시
+	
+	private LocalDateTime pausedDateTime;		// 일시 정지 일시
+	
+	private LocalDateTime closedDateTime;		// 상품 판매 종료 일시
+	
 	
 	//===비즈니스 로직===//
 	// 재고 추가
@@ -71,9 +95,28 @@ public class Item {
 	// 재고 감소 (부족하면 에러 발생)
 	public void removeStock(int quantity) {
 		int resultStock = this.stockQuantity - quantity;
-		if(resultStock < 0) {
-			throw new NotEnoughStockException(this.name + " 의 제고가 부족합니다.");
+		if(resultStock < 0) 
+			throw new NotEnoughStockException(this.name + " 의 재고가 부족합니다.");
+	}
+	
+	// 제목 이미지 추가
+	public void addBanner(ItemBanner banner) {
+		if(this.banners.size() == 0) {
+			this.mainBanner = banner.getImage();
 		}
+		
+		this.banners.add(banner);
+		banner.setItem(this);
+	}
+	
+	// 제목 이미지 삭제
+	public void removeBanner(ItemBanner banner) {
+		if(banner.getImage().equals(this.mainBanner)) {
+			this.mainBanner = null;
+		}
+		
+		this.banners.remove(banner);
+		banner.setId(null);
 	}
 	
 	// 카테고리 추가
@@ -81,9 +124,58 @@ public class Item {
 		this.categorys.add(category);
 	}
 	
+	// 카테고리 수정
+	public void updateCategorys(Set<Category> categorys) {
+		this.categorys = categorys;
+	}
+	
 	// 카테고리 삭제
 	public void removeCategory(Category category) {
 		this.categorys.remove(category);
+	}
+	
+	// 상품 공개
+	public void publish() {
+		if(!this.published && !this.closed) {
+			this.published = true;
+			this.publishedDateTime = LocalDateTime.now();
+		}
+		else {
+			throw new IllegalAccessError("상품을 공개할 수 없는 상태입니다. 상품이 이미 공개되었거나 판매 종료되었습니다.");
+		}
+	}
+	
+	// 상품 판매 종료
+	public void close() {
+		if(this.published && !this.closed) {
+			this.published = false;
+			this.closed = true;
+			this.closedDateTime = LocalDateTime.now();
+		}
+		else {
+			throw new IllegalAccessError("상품을 판매 종료할 수 없는 상태입니다. 상품이 공개되지않았거나 이미 판매 종료되었습니다.");
+		}
+	}
+	
+	// 상품 판매 정지
+	public void pause() {
+		if(!this.paused) {
+			this.paused = true;
+			this.pausedDateTime = LocalDateTime.now();
+		}
+		else {
+			throw new IllegalAccessError("상품을 판매 일시 정지할 수 없는 상태입니다. 상품이 이미 판매 정지입니다.");
+		}
+	}
+	
+	// 상품 판매 정지 -> 재개
+	public void resum() {
+		if(this.paused) {
+			this.paused = false;
+		}
+		else {
+			throw new IllegalAccessError("상품을 판매할 수 없는 상태입니다. 상품이 이미 판매 중입니다.");
+		}
 	}
 
 }
