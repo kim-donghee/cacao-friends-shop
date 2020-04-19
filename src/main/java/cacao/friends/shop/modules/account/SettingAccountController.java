@@ -88,7 +88,7 @@ public class SettingAccountController {
 	@GetMapping("/notifications")
 	public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
 		model.addAttribute(modelMapper.map(account, NotificationsForm.class));
-		model.addAttribute("tagList", characterKindRepository.findAll());
+		model.addAttribute("characterList", characterKindRepository.findAll());
 		return "account/settings/notifications";
 	}
 	
@@ -98,16 +98,13 @@ public class SettingAccountController {
 			@Valid NotificationsForm notificationsForm, Errors errors, 
 			Model model, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
+			model.addAttribute("characterList", characterKindRepository.findAll());
 			return "account/settings/notifications";
 		}
-		
-		CharacterKind tag = characterKindRepository.findByName(notificationsForm.getTagName());
-		
+		CharacterKind tag = characterKindRepository.findById(notificationsForm.getCharacterId()).get();
 		accountService.updateNotifications(account, tag, notificationsForm);
-		
 		attributes.addFlashAttribute("message", "알림을 수정했습니다.");
-		
-		return "account/settings/notifications";
+		return "redirect:/account/settings/notifications";
 	}
 	
 

@@ -213,7 +213,7 @@ public class ItemController {
 	@PostMapping("/{id}/resume")
 	public String resumeItem(@PathVariable Long id, RedirectAttributes attributes) {
 		Item item = itemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 상품이 없습니다."));
-		itemService.pause(item);
+		itemService.resum(item);
 		attributes.addFlashAttribute("message", "상품을 다시 공개했습니다.");
 		return "redirect:/manager/item/" + id + "/item";
 	}

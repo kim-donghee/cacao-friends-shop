@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
+import cacao.friends.shop.modules.item.event.ItemPublishEvent;
 import cacao.friends.shop.modules.item.form.ItemForm;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class ItemService {
 
 	private final ItemRepository itemRepository;
+	
+	private final ApplicationEventPublisher eventPublisher;
 	
 	private final ModelMapper modelMapper;
 	
@@ -59,9 +63,7 @@ public class ItemService {
 
 	public void publish(Item item) {
 		item.publish();
-		
-		// TODO 아이템의 캐릭터를 선택한 고객이 알림 설정 받게 수정
-		
+		eventPublisher.publishEvent(new ItemPublishEvent(item));
 	}
 
 	public void close(Item item) {

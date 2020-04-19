@@ -1,6 +1,7 @@
 package cacao.friends.shop.modules.account.form;
 
-import javax.validation.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class NotificationsForm {
 	
 	private boolean itemCreatedByWeb;
 	
-	@NotBlank
-	private String tagName;
+	@NotNull
+	private Long characterId;
 
 }
