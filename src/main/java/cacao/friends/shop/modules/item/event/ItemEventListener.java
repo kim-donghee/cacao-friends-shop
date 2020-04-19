@@ -15,6 +15,7 @@ import cacao.friends.shop.modules.account.AccountRepository;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.ItemRepository;
+import cacao.friends.shop.modules.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 
 @Async
@@ -27,6 +28,8 @@ public class ItemEventListener {
 	
 	private final AccountRepository accountRepository;
 	
+	private final NotificationService notificationService;
+	
 	private final JavaMailSender javaMailSender;
 	
 	private final AppProperties appProperties;
@@ -35,18 +38,23 @@ public class ItemEventListener {
 	public void handlerItemPublishEvent(ItemPublishEvent event) {
 		Item item = itemRepository.findById(event.getItem().getId()).get();
 		CharacterKind character = item.getCharacter();
-		List<Account> accountList = accountRepository.findByPickCharacter(character);
+		List<Account> accounts = accountRepository.findByPickCharacter(character);
 		
 		String host = appProperties.getHost();
 		
-		accountList.forEach(a -> {
-			SimpleMailMessage mailMessage = new SimpleMailMessage();
-			mailMessage.setTo(a.getEmail());
-			mailMessage.setSubject("새로운 상품이 출시했습니다." + item.getName());
-			mailMessage.setText(item.getShortDescript() + " - " + (host));
-			javaMailSender.send(mailMessage);
+		accounts.forEach(a -> {
+			if(a.isItemCreatedByEmail()) {
+				SimpleMailMessage mailMessage = new SimpleMailMessage();
+				mailMessage.setTo(a.getEmail());
+				mailMessage.setSubject("새로운 상품이 출시했습니다." + item.getName());
+				mailMessage.setText(item.getShortDescript() + " - " + (host));
+				javaMailSender.send(mailMessage);
+			}
 			
-			javaMailSender.send(mailMessage);
+			if(a.isItemCreatedByWeb()) {
+				notificationService.createNotification(a, "새로운 상품이 출시했습니다." + item.getName(), 
+						item.getShortDescript(), "/search/" + item.getId());
+			}
 		});
 	}
 }

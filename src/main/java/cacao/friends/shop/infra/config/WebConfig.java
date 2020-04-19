@@ -9,14 +9,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import cacao.friends.shop.modules.category.CategoryInterceptor;
+import cacao.friends.shop.modules.main.AccountInterceptor;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 	
-	private final CategoryInterceptor categoryInterceptor;
+	private final AccountInterceptor categoryInterceptor;
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {

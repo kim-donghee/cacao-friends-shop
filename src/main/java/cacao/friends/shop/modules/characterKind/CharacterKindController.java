@@ -24,7 +24,7 @@ public class CharacterKindController {
 	
 	private String redirectView = "redirect:/manager/character";
 	
-	private String validMessage = " 2글자에서 50글자의 이름과 이미지를 반드시 필요합니다.";
+	private String validMessage = " 1글자에서 50글자의 이름과 이미지를 반드시 필요합니다.";
 	
 	@GetMapping
 	public String characterView(Model model) {
