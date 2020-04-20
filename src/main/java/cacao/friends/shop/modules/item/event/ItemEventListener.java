@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.infra.config.AppProperties;
-import cacao.friends.shop.modules.account.Account;
-import cacao.friends.shop.modules.account.AccountRepository;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.ItemRepository;
+import cacao.friends.shop.modules.member.Member;
+import cacao.friends.shop.modules.member.MemberRepository;
 import cacao.friends.shop.modules.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +26,7 @@ public class ItemEventListener {
 	
 	private final ItemRepository itemRepository;
 	
-	private final AccountRepository accountRepository;
+	private final MemberRepository memberRepository;
 	
 	private final NotificationService notificationService;
 	
@@ -38,11 +38,11 @@ public class ItemEventListener {
 	public void handlerItemPublishEvent(ItemPublishEvent event) {
 		Item item = itemRepository.findById(event.getItem().getId()).get();
 		CharacterKind character = item.getCharacter();
-		List<Account> accounts = accountRepository.findByPickCharacter(character);
+		List<Member> members = memberRepository.findByPickCharacter(character);
 		
 		String host = appProperties.getHost();
 		
-		accounts.forEach(a -> {
+		members.forEach(a -> {
 			if(a.isItemCreatedByEmail()) {
 				SimpleMailMessage mailMessage = new SimpleMailMessage();
 				mailMessage.setTo(a.getEmail());

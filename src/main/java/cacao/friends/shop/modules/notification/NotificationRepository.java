@@ -2,12 +2,12 @@ package cacao.friends.shop.modules.notification;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import cacao.friends.shop.modules.account.Account;
+import cacao.friends.shop.modules.member.Member;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-	Notification findByAccountAndChecked(Account currentAccount, boolean checked);
+	Notification findByAccountAndChecked(Member currentAccount, boolean checked);
 
-	Long countByAccountAndChecked(Account currentAccount, boolean checked);
+	Long countByAccountAndChecked(Member currentAccount, boolean checked);
 
 }

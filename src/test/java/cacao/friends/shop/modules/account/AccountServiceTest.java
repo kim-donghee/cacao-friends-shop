@@ -12,17 +12,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import cacao.friends.shop.modules.account.form.JoinForm;
 import cacao.friends.shop.modules.address.form.AddressForm;
+import cacao.friends.shop.modules.member.Member;
+import cacao.friends.shop.modules.member.MemberRepository;
+import cacao.friends.shop.modules.member.MemberService;
+import cacao.friends.shop.modules.member.form.JoinForm;
 
 @ActiveProfiles("local")
 @SpringBootTest
 @Transactional
 public class AccountServiceTest {
 	
-	@Autowired AccountService accountService;
+	@Autowired MemberService memberService;
 	
-	@Autowired AccountRepository accountRepository;
+	@Autowired MemberRepository memberRepository;
 	
 	@PersistenceContext EntityManager em;
 	
@@ -33,9 +36,9 @@ public class AccountServiceTest {
 		joinForm.setPassword("12345678");
 		joinForm.setEmail("dong@dong.com");
 		
-		Account newAccount = accountService.saveNewAccount(joinForm);
+		Member newAccount = memberService.saveNewAccount(joinForm);
 		
-		accountService.complateJoin(newAccount);
+		memberService.complateJoin(newAccount);
 		
 		assertNotNull(newAccount.getEmailCheckToken());
 		assertTrue(newAccount.isEmailVerified());
@@ -48,7 +51,7 @@ public class AccountServiceTest {
 		joinForm.setPassword("12345678");
 		joinForm.setEmail("dong@dong.com");
 		
-		Account newAccount = accountService.saveNewAccount(joinForm);
+		Member newAccount = memberService.saveNewAccount(joinForm);
 		
 		em.flush();
 		em.clear();
@@ -59,12 +62,12 @@ public class AccountServiceTest {
 		addressForm.setZipcode("zipcode");
 		addressForm.setEtc("etc");
 		
-		accountService.updateAddress(newAccount, addressForm);
+		memberService.updateAddress(newAccount, addressForm);
 		
 		em.flush();
 		em.clear();
 		
-		Account findAccount = accountRepository.findById(1L).get();
+		Member findAccount = memberRepository.findById(1L).get();
 		
 		assertNotNull(findAccount.getAddress());
 	}

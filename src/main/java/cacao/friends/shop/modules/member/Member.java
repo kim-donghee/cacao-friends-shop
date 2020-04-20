@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.account;
+package cacao.friends.shop.modules.member;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -24,7 +24,7 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @NoArgsConstructor @AllArgsConstructor @Builder 
-public class Account {
+public class Member {
 	
 	@Id @GeneratedValue
 	private Long id;

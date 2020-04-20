@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.account;
+package cacao.friends.shop.modules.member;
 
 import java.util.List;
 
@@ -6,11 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-	Account findByUsername(String username);
+	Member findByUsername(String username);
 
-	Account findByEmail(String email);
+	Member findByEmail(String email);
 
 	Long countByEmailVerified(boolean emailVerified);
 
@@ -18,6 +18,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
 	boolean existsByUsername(String username);
 	
-	List<Account> findByPickCharacter(CharacterKind characterKind);
+	List<Member> findByPickCharacter(CharacterKind characterKind);
 
 }

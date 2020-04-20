@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.account.form;
+package cacao.friends.shop.modules.member.form;
 
 
 import javax.validation.constraints.NotNull;

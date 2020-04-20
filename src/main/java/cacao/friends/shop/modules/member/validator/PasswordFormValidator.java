@@ -1,10 +1,10 @@
-package cacao.friends.shop.modules.account.validator;
+package cacao.friends.shop.modules.member.validator;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import cacao.friends.shop.modules.account.form.PasswordForm;
+import cacao.friends.shop.modules.member.form.PasswordForm;
 
 @Component
 public class PasswordFormValidator implements Validator{

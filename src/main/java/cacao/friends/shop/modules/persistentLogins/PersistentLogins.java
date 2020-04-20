@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.account;
+package cacao.friends.shop.modules.persistentLogins;
 
 import java.time.LocalDateTime;
 

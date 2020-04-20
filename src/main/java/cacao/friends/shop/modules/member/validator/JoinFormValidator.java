@@ -1,18 +1,18 @@
-package cacao.friends.shop.modules.account.validator;
+package cacao.friends.shop.modules.member.validator;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import cacao.friends.shop.modules.account.AccountRepository;
-import cacao.friends.shop.modules.account.form.JoinForm;
+import cacao.friends.shop.modules.member.MemberRepository;
+import cacao.friends.shop.modules.member.form.JoinForm;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class JoinFormValidator implements Validator {
 	
-	private final AccountRepository accountRepository;
+	private final MemberRepository memberRepository;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -23,12 +23,12 @@ public class JoinFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		JoinForm joinForm = (JoinForm) target;
 		
-		if(accountRepository.existsByEmail(joinForm.getEmail())) {
+		if(memberRepository.existsByEmail(joinForm.getEmail())) {
 			errors.rejectValue("email", "invalid.email", new Object[] {joinForm.getEmail()}, 
 					"이미 사용중인 이메일입니다.");
 		}
 		
-		if(accountRepository.existsByUsername(joinForm.getUsername())) {
+		if(memberRepository.existsByUsername(joinForm.getUsername())) {
 			errors.rejectValue("username", "invalid.username", new Object[] {joinForm.getUsername()}, 
 					"이미 사용중인 닉네임입니다.");
 		}

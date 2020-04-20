@@ -6,8 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cacao.friends.shop.modules.account.Account;
-import cacao.friends.shop.modules.item.Item;
+import cacao.friends.shop.modules.member.Member;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,13 +16,13 @@ public class NotificationService {
 	
 	private final NotificationRepository notificationRepository;
 	
-	public void createNotification(Account account, String title, String message, String link) {
+	public void createNotification(Member member, String title, String message, String link) {
 		Notification notification = 
 				Notification.builder()
 				.title(title)
 				.message(message)
 				.link(link)
-				.account(account)
+				.member(member)
 				.createdDateTime(LocalDateTime.now())
 				.build();
 		notificationRepository.save(notification);

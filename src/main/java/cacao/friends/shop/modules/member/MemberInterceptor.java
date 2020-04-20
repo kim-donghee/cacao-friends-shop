@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.main;
+package cacao.friends.shop.modules.member;
 
 import java.util.List;
 
@@ -13,8 +13,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cacao.friends.shop.modules.account.Account;
-import cacao.friends.shop.modules.account.UserAccount;
 import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.category.CategoryRepository;
 import cacao.friends.shop.modules.notification.NotificationRepository;
@@ -28,7 +26,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor
-public class AccountInterceptor implements HandlerInterceptor {
+public class MemberInterceptor implements HandlerInterceptor {
 	
 	private final CategoryRepository categoryRepository;
 	
@@ -50,10 +48,10 @@ public class AccountInterceptor implements HandlerInterceptor {
 		modelAndView.addObject("categoryList", categoryLsit);
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication == null || !(authentication.getPrincipal() instanceof UserAccount))
+		if(authentication == null || !(authentication.getPrincipal() instanceof UserMember))
 			return;
 		
-		Account currentAccount = ((UserAccount) authentication.getPrincipal()).getAccount();
+		Member currentAccount = ((UserMember) authentication.getPrincipal()).getMember();
 		
 		Long count = notificationRepository.countByAccountAndChecked(currentAccount, false);
 		

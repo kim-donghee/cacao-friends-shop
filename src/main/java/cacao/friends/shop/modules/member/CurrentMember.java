@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.main;
+package cacao.friends.shop.modules.member;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,6 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 @AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : account")
-public @interface CurrentAccount {
+public @interface CurrentMember {
 
 }

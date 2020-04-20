@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import cacao.friends.shop.modules.account.Account;
+import cacao.friends.shop.modules.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -44,7 +44,7 @@ public class Orders {
 	private OrderStatus orderStatus;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Account account;
+	private Member member;
 	
 	private String email;				// 비 로그인시 이메일
 	

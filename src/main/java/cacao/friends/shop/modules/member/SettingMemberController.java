@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.account;
+package cacao.friends.shop.modules.member;
 
 import javax.validation.Valid;
 
@@ -13,23 +13,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import cacao.friends.shop.modules.account.form.NotificationsForm;
-import cacao.friends.shop.modules.account.form.PasswordForm;
-import cacao.friends.shop.modules.account.validator.PasswordFormValidator;
 import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
-import cacao.friends.shop.modules.main.CurrentAccount;
+import cacao.friends.shop.modules.member.form.NotificationsForm;
+import cacao.friends.shop.modules.member.form.PasswordForm;
+import cacao.friends.shop.modules.member.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/account/settings")
+@RequestMapping("/member/settings")
 @RequiredArgsConstructor
-public class SettingAccountController {
+public class SettingMemberController {
 	
-	private final AccountRepository accountRepository;
+//	private final MemberRepository memberRepository;
 	
-	private final AccountService accountService;
+	private final MemberService memberService;
 	
 	private final PasswordFormValidator passwordFormValidator;
 	
@@ -43,69 +42,67 @@ public class SettingAccountController {
 	}
 	
 	@GetMapping("/address")
-	public String updateAddressForm(@CurrentAccount Account account, Model model) {
+	public String updateAddressForm(@CurrentMember Member member, Model model) {
 		AddressForm addressForm = new AddressForm();
-		if(account.getAddress() != null)
-			modelMapper.map(account.getAddress(), addressForm);
+		if(member.getAddress() != null)
+			modelMapper.map(member.getAddress(), addressForm);
 		model.addAttribute(addressForm);
-		return "account/settings/address";
+		return "member/account/settings/address";
 	}
 	
 	@PostMapping("/address")
-	public String updateAddressSubmit(@CurrentAccount Account account, @Valid AddressForm addressForm, 
+	public String updateAddressSubmit(@CurrentMember Member member, @Valid AddressForm addressForm, 
 			Errors errors, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
-			return "account/settings/address";
+			return "member/account/settings/address";
 		}
 		
-		accountService.updateAddress(account, addressForm);
+		memberService.updateAddress(member, addressForm);
 		
 		attributes.addFlashAttribute("message", "주소를 수정했습니다.");
 		
-		return "redirect:/account/settings/address";
+		return "redirect:/member/settings/address";
 	}
 	
 	@GetMapping("/password")
-	public String updatePasswordform(@CurrentAccount Account account, Model model) {
+	public String updatePasswordform(@CurrentMember Member member, Model model) {
 		model.addAttribute(new PasswordForm());
-		return "account/settings/password";
+		return "member/account/settings/password";
 	}
 	
 	@PostMapping("/password")
-	public String updatePasswordSubmit(@CurrentAccount Account account, @Valid PasswordForm passwordForm, 
+	public String updatePasswordSubmit(@CurrentMember Member member, @Valid PasswordForm passwordForm, 
 			Errors errors, Model model, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
-			return "account/settings/password";
+			return "member/account/settings/password";
 		}
 		
-		accountService.updatePassword(account, passwordForm.getNewPassword());
+		memberService.updatePassword(member, passwordForm.getNewPassword());
 		
 		attributes.addFlashAttribute("message", "패스워드를 수정했습니다.");
 		
-		return "redirect:/account/settings/password";
+		return "redirect:/member/settings/password";
 	}
 	
 	@GetMapping("/notifications")
-	public String updateNotificationsForm(@CurrentAccount Account account, Model model) {
-		model.addAttribute(modelMapper.map(account, NotificationsForm.class));
+	public String updateNotificationsForm(@CurrentMember Member member, Model model) {
+		model.addAttribute(modelMapper.map(member, NotificationsForm.class));
 		model.addAttribute("characterList", characterKindRepository.findAll());
-		return "account/settings/notifications";
+		return "member/account/settings/notifications";
 	}
 	
-	// TODO 캐릭터 저장기능 구현 후에 마무리...
 	@PostMapping("/notifications")
-	public String updateNotificationsSubmit(@CurrentAccount Account account, 
+	public String updateNotificationsSubmit(@CurrentMember Member member, 
 			@Valid NotificationsForm notificationsForm, Errors errors, 
 			Model model, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
 			model.addAttribute("characterList", characterKindRepository.findAll());
-			return "account/settings/notifications";
+			return "member/account/settings/notifications";
 		}
-		CharacterKind tag = characterKindRepository.findById(notificationsForm.getCharacterId()).get();
-		accountService.updateNotifications(account, tag, notificationsForm);
+		CharacterKind character = characterKindRepository.findById(notificationsForm.getCharacterId()).get();
+		memberService.updateNotifications(member, character, notificationsForm);
 		attributes.addFlashAttribute("message", "알림을 수정했습니다.");
-		return "redirect:/account/settings/notifications";
+		return "redirect:/member/settings/notifications";
 	}
-	
 
 }
