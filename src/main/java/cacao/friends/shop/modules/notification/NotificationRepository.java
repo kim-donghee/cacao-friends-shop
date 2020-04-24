@@ -6,8 +6,8 @@ import cacao.friends.shop.modules.member.Member;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-	Notification findByAccountAndChecked(Member currentAccount, boolean checked);
+	Notification findByMemberAndChecked(Member currentMember, boolean checked);
 
-	Long countByAccountAndChecked(Member currentAccount, boolean checked);
+	Long countByMemberAndChecked(Member currentMember, boolean checked);
 
 }

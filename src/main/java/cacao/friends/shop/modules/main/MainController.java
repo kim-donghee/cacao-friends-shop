@@ -8,7 +8,7 @@ public class MainController {
 	
 	@GetMapping("/")
 	public String home() {
-		return "account/index";
+		return "member/index";
 	}
 	
 	@GetMapping("/manager")
