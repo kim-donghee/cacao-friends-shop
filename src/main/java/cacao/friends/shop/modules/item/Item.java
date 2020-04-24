@@ -15,7 +15,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.exception.NotEnoughStockException;
 import lombok.AllArgsConstructor;
@@ -65,9 +64,9 @@ public class Item {
 	@JoinColumn(nullable = true)
 	private CharacterKind character;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
-	private Set<Category> categorys = new HashSet<>();
+	private Set<ItemCategory> itemCategorys = new HashSet<>();
 	
 	//=== 상품 상태 ===//
 	@Builder.Default
@@ -111,27 +110,27 @@ public class Item {
 	
 	// 제목 이미지 삭제
 	public void removeBanner(ItemBanner banner) {
+		this.banners.remove(banner);
+		banner.setItem(null);
+		
 		if(banner.getImage().equals(this.mainBanner)) {
 			this.mainBanner = null;
+			if(this.banners.iterator().hasNext()) {
+				this.mainBanner = this.banners.iterator().next().getImage();
+			}
 		}
-		
-		this.banners.remove(banner);
-		banner.setId(null);
 	}
 	
 	// 카테고리 추가
-	public void addCategory(Category category) {
-		this.categorys.add(category);
-	}
-	
-	// 카테고리 수정
-	public void updateCategorys(Set<Category> categorys) {
-		this.categorys = categorys;
+	public void addCategory(ItemCategory itemCategory) {
+		this.itemCategorys.add(itemCategory);
+		itemCategory.setItem(this);
 	}
 	
 	// 카테고리 삭제
-	public void removeCategory(Category category) {
-		this.categorys.remove(category);
+	public void removeCategory(ItemCategory itemCategory) {
+		this.itemCategorys.remove(itemCategory);
+		itemCategory.setItem(null);
 	}
 	
 	// 상품 공개
@@ -148,7 +147,6 @@ public class Item {
 	// 상품 판매 종료
 	public void close() {
 		if(this.published && !this.closed) {
-			this.published = false;
 			this.closed = true;
 			this.closedDateTime = LocalDateTime.now();
 		}

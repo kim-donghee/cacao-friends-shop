@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -24,6 +27,7 @@ import cacao.friends.shop.modules.category.CategoryRepository;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.item.form.ItemForm;
+import cacao.friends.shop.modules.item.form.ItemSearchForm;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -37,8 +41,6 @@ public class ItemController {
 	
 	private final ItemBannerRepository itemBannerRepository;
 	
-	private final ItemBannerService itemBannerService;
-	
 	private final CharacterKindRepository characterKindRepository;
 	
 	private final CategoryRepository categoryRepository;
@@ -48,11 +50,23 @@ public class ItemController {
 	private final ObjectMapper objectMapper;
 	
 	// 상품 목록
-	// TODO 페이징 처리
 	@GetMapping
-	public String viewItem(Model model) {
-		model.addAttribute("itemList", itemRepository.findAll());
+	public String itemsView(ItemSearchForm itemSearchForm, 
+			@PageableDefault(page = 0, size = 9, sort = "id", direction = Direction.DESC) Pageable pageable, Model model) {
+		ItemCondition itemCondition = modelMapper.map(itemSearchForm, ItemCondition.class);
+		itemCondition.settingItemStatus(itemSearchForm.getItemSatus());
+		
+		model.addAttribute("keyword", itemSearchForm.getKeyword());
+		model.addAttribute("itemSatus", itemSearchForm.getItemSatus());
+		model.addAttribute("itemPage", itemRepository.findAll(ItemSpec.itemCondition(itemCondition), pageable));
 		return "manager/item/list";
+	}
+	
+	// 미공개 전체 삭제
+	@PostMapping("/undisclosed/remove")
+	public String undisclosedRemove() {
+		itemService.undisclosedRemove();
+		return "redirect:/manager/item";
 	}
 	
 	// 상품 등록
@@ -108,17 +122,16 @@ public class ItemController {
 	@PostMapping("/{id}/banner")
 	public String addBanner(@PathVariable Long id, String image, Model model, RedirectAttributes attributes) {
 		Item item = itemRepository.findWithBannersById(id);
-		ItemBanner saveBanner = itemBannerService.createBanner(image);
-		itemService.addBanner(item, saveBanner);
+		itemService.addBanner(item, image);
 		attributes.addFlashAttribute("message", "상품 배너를 수정했습니다.");
 		return "redirect:/manager/item/" + id + "/banner";
 	}
 	
 	// 상품 배너 삭제
 	@PostMapping("/{id}/banner/remove")
-	public String removeBanner(@PathVariable Long id, Long bannerId, Model model, RedirectAttributes attributes) {
+	public String removeBanner(@PathVariable Long id, Long banner, Model model, RedirectAttributes attributes) {
 		Item item = itemRepository.findWithBannersById(id);
-		ItemBanner itemBanner = itemBannerRepository.findById(bannerId).get();
+		ItemBanner itemBanner = itemBannerRepository.findById(banner).get();
 		itemService.removeBanner(item, itemBanner);
 		attributes.addFlashAttribute("message", "상품 배너를 수정했습니다.");
 		return "redirect:/manager/item/" + id + "/banner";
@@ -126,9 +139,9 @@ public class ItemController {
 	
 	// 상품 메인 배너
 	@PostMapping("/{id}/banner/main-banner-image")
-	public String updateMainBanner(@PathVariable Long id, Long bannerId, Model model, RedirectAttributes attributes) {
+	public String updateMainBanner(@PathVariable Long id, Long banner, Model model, RedirectAttributes attributes) {
 		Item item = itemRepository.findWithBannersById(id);
-		ItemBanner itemBanner = itemBannerRepository.findById(bannerId).get();
+		ItemBanner itemBanner = itemBannerRepository.findById(banner).get();
 		itemService.updateMainBanner(item, itemBanner.getImage());
 		attributes.addFlashAttribute("message", "상품 메인 배너를 수정했습니다.");
 		return "redirect:/manager/item/" + id + "/banner";
@@ -160,7 +173,9 @@ public class ItemController {
 	public String updateCategoryForm(@PathVariable Long id, Model model) throws JsonProcessingException {
 		Item item = itemRepository.findWithCategorysById(id);
 		List<Category> categoryList = categoryRepository.findAllWithChildBy();
-		List<Long> currentCategoryList = item.getCategorys().stream().map(Category::getId).collect(Collectors.toList());
+		List<Long> currentCategoryList = 
+				item.getItemCategorys().stream()
+					.map(ItemCategory::getCategory).map(Category::getId).collect(Collectors.toList());
 		model.addAttribute(id);
 		model.addAttribute(item);
 		model.addAttribute("categoryList", categoryList);
@@ -169,7 +184,13 @@ public class ItemController {
 	}
 	
 	@PostMapping("/{id}/category")
-	public String updateCategory(@PathVariable Long id, @RequestParam List<Long> categorys, Model model, RedirectAttributes attributes) {
+	public String updateCategory(@PathVariable Long id, @RequestParam(required = false) List<Long> categorys, 
+			Model model, RedirectAttributes attributes) {
+		if(categorys == null || categorys.isEmpty()) {
+			attributes.addFlashAttribute("error", "상품의 카테고리를 선택하세요.");
+			return "redirect:/manager/item/" + id + "/category";
+		}
+		
 		Item item = itemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 상품이 없습니다."));
 		List<Category> categoryList = categoryRepository.findAllById(categorys);
 		itemService.updateCategorys(item, categoryList);

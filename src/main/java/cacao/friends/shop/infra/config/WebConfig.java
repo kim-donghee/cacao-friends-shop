@@ -6,9 +6,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import cacao.friends.shop.modules.item.ItemSearchHandlerMethodArgumentResolver;
 import cacao.friends.shop.modules.member.MemberInterceptor;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +20,8 @@ public class WebConfig implements WebMvcConfigurer {
 	
 	private final MemberInterceptor memberInterceptor;
 	
+	private final ItemSearchHandlerMethodArgumentResolver itemSearchHandlerMethodArgumentResolver;
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		List<String> staticResourcesPath = Arrays.stream(StaticResourceLocation.values())
@@ -26,6 +30,11 @@ public class WebConfig implements WebMvcConfigurer {
 		staticResourcesPath.add("/node_modules/**");
 		
 		registry.addInterceptor(memberInterceptor).excludePathPatterns(staticResourcesPath);
+	}
+	
+	@Override
+	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+		resolvers.add(itemSearchHandlerMethodArgumentResolver);
 	}
 
 }
