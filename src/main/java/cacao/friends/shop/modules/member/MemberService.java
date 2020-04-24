@@ -58,7 +58,7 @@ public class MemberService  implements UserDetailsService {
 		Member newAccount = memberRepository.save(member);
 
 		sendJoinConfirmEmail(newAccount, "Cacao Friends Shop, 회원 가입 인증", 
-				"/account/check-email-token?token=" + newAccount.getEmailCheckToken() +
+				"/member/check-email-token?token=" + newAccount.getEmailCheckToken() +
 				"&email=" + newAccount.getEmail());
 		
 		return newAccount;
@@ -105,7 +105,7 @@ public class MemberService  implements UserDetailsService {
 	public void sendLoginLink(Member member) {
 		member.generateEmailToken();
 		sendJoinConfirmEmail(member, "Cacao Friends Shop, 이메일 인증",
-				"/account/login-by-email?token=" + member.getEmailCheckToken() +
+				"/member/login-by-email?token=" + member.getEmailCheckToken() +
 				"&email=" + member.getEmail());		
 	}
 

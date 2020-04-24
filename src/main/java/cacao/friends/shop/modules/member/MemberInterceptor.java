@@ -51,9 +51,9 @@ public class MemberInterceptor implements HandlerInterceptor {
 		if(authentication == null || !(authentication.getPrincipal() instanceof UserMember))
 			return;
 		
-		Member currentAccount = ((UserMember) authentication.getPrincipal()).getMember();
+		Member currentMember = ((UserMember) authentication.getPrincipal()).getMember();
 		
-		Long count = notificationRepository.countByAccountAndChecked(currentAccount, false);
+		Long count = notificationRepository.countByMemberAndChecked(currentMember, false);
 		
 		if(count > 0) {
 			modelAndView.addObject("notificationNumber", count);
