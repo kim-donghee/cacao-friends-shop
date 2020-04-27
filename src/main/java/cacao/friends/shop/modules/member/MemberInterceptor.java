@@ -13,6 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import cacao.friends.shop.modules.cart.CartService;
 import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.category.CategoryRepository;
 import cacao.friends.shop.modules.notification.NotificationRepository;
@@ -32,32 +33,39 @@ public class MemberInterceptor implements HandlerInterceptor {
 	
 	private final NotificationRepository notificationRepository;
 	
+	private final CartService cartService;
+	
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		if(modelAndView == null)
 			return;
-		
 		if(MediaType.APPLICATION_JSON_VALUE.equals(request.getContentType()))
 			return;
-		
 		if(isRedirectView(modelAndView) || !isAccountView(modelAndView)) 
 			return;
 		
+		// 카테고리 
 		List<Category> categoryLsit = categoryRepository.findByParentCategoryIsNull();
 		modelAndView.addObject("categoryList", categoryLsit);
 		
+		// 알림
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if(authentication == null || !(authentication.getPrincipal() instanceof UserMember))
 			return;
-		
 		Member currentMember = ((UserMember) authentication.getPrincipal()).getMember();
 		
-		Long count = notificationRepository.countByMemberAndChecked(currentMember, false);
-		
-		if(count > 0) {
-			modelAndView.addObject("notificationNumber", count);
+		Long notificationNumber = notificationRepository.countByMemberAndChecked(currentMember, false);
+		if(notificationNumber > 0) {
+			modelAndView.addObject("notificationNumber", notificationNumber);
 			modelAndView.addObject("hasNotification", true);
+		}
+		
+		// 카트 알림
+		int cartNumber = cartService.countCart();
+		if(cartNumber > 0) {
+			modelAndView.addObject("cartNumber", cartNumber);
+			modelAndView.addObject("hasCart", true);
 		}
 		
 	}

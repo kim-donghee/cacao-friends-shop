@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +45,7 @@ public class Item {
 	@Column(nullable = false)
 	private Integer stockQuantity = 0;
 	
-	@Lob
+	@Lob @Basic
 	@Column(nullable = false)
 	private String detail;
 	
@@ -52,7 +53,7 @@ public class Item {
 	private String shortDescript;
 	
 	//=== 배너  ===//
-	@Lob
+	@Lob @Basic
 	private String mainBanner;
 	
 	@Builder.Default

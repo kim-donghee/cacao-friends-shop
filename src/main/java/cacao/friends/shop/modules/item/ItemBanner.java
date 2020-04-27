@@ -1,5 +1,6 @@
 package cacao.friends.shop.modules.item;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,7 +22,7 @@ public class ItemBanner {
 	@Id @GeneratedValue
 	private Long id;
 	
-	@Lob
+	@Lob @Basic
 	private String image;
 	
 	@ManyToOne

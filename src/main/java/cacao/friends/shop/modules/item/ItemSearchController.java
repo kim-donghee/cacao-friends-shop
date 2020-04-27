@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import cacao.friends.shop.modules.category.CategoryRepository;
@@ -55,6 +56,13 @@ public class ItemSearchController {
 		model.addAttribute("itemPage", itemRepository.findAll(ItemSpec.itemCondition(itemCondition), pageable));
 		model.addAttribute("characterList", characterKindRepository.findAll());
 		return "member/items";
+	}
+	
+	@GetMapping("/item/{id}")
+	public String itemView(@PathVariable Long id, Model model) {
+		Item item = itemRepository.findWithBannersById(id);
+		model.addAttribute(item);
+		return "member/item";
 	}
 	
 	private Pageable createPageable(String sortProperty, int page, int size) {
