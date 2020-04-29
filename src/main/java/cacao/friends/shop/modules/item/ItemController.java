@@ -39,8 +39,6 @@ public class ItemController {
 	
 	private final ItemService itemService;
 	
-	private final ItemBannerRepository itemBannerRepository;
-	
 	private final CharacterKindRepository characterKindRepository;
 	
 	private final CategoryRepository categoryRepository;
@@ -131,8 +129,7 @@ public class ItemController {
 	@PostMapping("/{id}/banner/remove")
 	public String removeBanner(@PathVariable Long id, Long banner, Model model, RedirectAttributes attributes) {
 		Item item = itemRepository.findWithBannersById(id);
-		ItemBanner itemBanner = itemBannerRepository.findById(banner).get();
-		itemService.removeBanner(item, itemBanner);
+		itemService.removeBanner(item, banner);
 		attributes.addFlashAttribute("message", "상품 배너를 수정했습니다.");
 		return "redirect:/manager/item/" + id + "/banner";
 	}
@@ -141,8 +138,7 @@ public class ItemController {
 	@PostMapping("/{id}/banner/main-banner-image")
 	public String updateMainBanner(@PathVariable Long id, Long banner, Model model, RedirectAttributes attributes) {
 		Item item = itemRepository.findWithBannersById(id);
-		ItemBanner itemBanner = itemBannerRepository.findById(banner).get();
-		itemService.updateMainBanner(item, itemBanner.getImage());
+		itemService.updateMainBanner(item, banner);
 		attributes.addFlashAttribute("message", "상품 메인 배너를 수정했습니다.");
 		return "redirect:/manager/item/" + id + "/banner";
 	}
@@ -168,7 +164,7 @@ public class ItemController {
 		return "redirect:/manager/item/" + id + "/character";
 	}
 	
-	// 상품 캐릭터 수정
+	// 상품 카테고리 수정
 	@GetMapping("/{id}/category")
 	public String updateCategoryForm(@PathVariable Long id, Model model) throws JsonProcessingException {
 		Item item = itemRepository.findWithCategorysById(id);
