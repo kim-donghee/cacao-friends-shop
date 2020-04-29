@@ -51,14 +51,14 @@ public class MemberInterceptor implements HandlerInterceptor {
 		
 		// 알림
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if(authentication == null || !(authentication.getPrincipal() instanceof UserMember))
-			return;
-		Member currentMember = ((UserMember) authentication.getPrincipal()).getMember();
-		
-		Long notificationNumber = notificationRepository.countByMemberAndChecked(currentMember, false);
-		if(notificationNumber > 0) {
-			modelAndView.addObject("notificationNumber", notificationNumber);
-			modelAndView.addObject("hasNotification", true);
+		if(authentication != null && authentication.getPrincipal() instanceof UserMember) {
+			Member currentMember = ((UserMember) authentication.getPrincipal()).getMember();
+			
+			Long notificationNumber = notificationRepository.countByMemberAndChecked(currentMember, false);
+			if(notificationNumber > 0) {
+				modelAndView.addObject("notificationNumber", notificationNumber);
+				modelAndView.addObject("hasNotification", true);
+			}
 		}
 		
 		// 카트 알림
