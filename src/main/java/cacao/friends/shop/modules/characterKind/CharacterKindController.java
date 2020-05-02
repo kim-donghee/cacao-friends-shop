@@ -56,7 +56,7 @@ public class CharacterKindController {
 			return redirectView;
 		}
 		
-		CharacterKind character = characterRepository.findById(id).orElseThrow();
+		CharacterKind character = characterRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 캐릭터가 없습니다."));
 		
 		characterService.updateCharacter(character, form);
 		
@@ -66,7 +66,7 @@ public class CharacterKindController {
 	
 	@PostMapping("/{id}/remove")
 	public String updateTag(@PathVariable Long  id, RedirectAttributes attributes) {
-		CharacterKind character = characterRepository.findById(id).orElseThrow();
+		CharacterKind character = characterRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 캐릭터가 없습니다."));
 		
 		characterService.removeCharacter(character);
 		

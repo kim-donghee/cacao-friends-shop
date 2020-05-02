@@ -38,7 +38,7 @@ public class AccountServiceTest {
 		
 		Member newAccount = memberService.saveNewAccount(joinForm);
 		
-		memberService.complateJoin(newAccount);
+		memberService.completeJoin(newAccount);
 		
 		assertNotNull(newAccount.getEmailCheckToken());
 		assertTrue(newAccount.isEmailVerified());

@@ -35,7 +35,7 @@ public class CharacterKindService {
 		
 		int nameLength = name.length();
 		
-		if(name == null || image == null || nameLength < 1 || nameLength > 50 || image.isBlank()) {
+		if(name == null || image == null || nameLength < 1 || nameLength > 50 || image.isEmpty()) {
 			return false;
 		}
 		

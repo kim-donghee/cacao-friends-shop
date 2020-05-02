@@ -69,7 +69,7 @@ public class MemberController {
 			return view;
 		}
 		
-		memberService.complateJoin(member);
+		memberService.completeJoin(member);
 		memberService.login(member);
 		model.addAttribute("numberOfUser", memberRepository.countByEmailVerified(true));
 		model.addAttribute("username", member.getUsername());

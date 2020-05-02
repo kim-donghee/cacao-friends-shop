@@ -42,6 +42,7 @@ public class ItemCondition {
 			this.closed = true;
 			this.paused = null;
 			break;
+		case "ALL":
 		default :
 			this.published = null;
 			this.closed = null;

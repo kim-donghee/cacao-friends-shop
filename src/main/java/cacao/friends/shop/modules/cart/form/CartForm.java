@@ -3,8 +3,8 @@ package cacao.friends.shop.modules.cart.form;
 import lombok.Data;
 
 @Data
-public class CartEditForm {
+public class CartForm {
 	
-	private String quantity;
+	private Integer quantity;
 
 }

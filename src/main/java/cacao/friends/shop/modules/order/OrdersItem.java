@@ -1,7 +1,5 @@
 package cacao.friends.shop.modules.order;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,27 +30,25 @@ public class OrdersItem {
 	
 	private Integer price;				// 상품 하나 가격
 
-	private Integer count;				// 주문 갯수
+	private Integer quantity;			// 주문 갯수
 	
 	private String itemName;			// 상품 이름
 	
-	private LocalDateTime orderedAt;	// 주문 일시
-	
-	private LocalDateTime canceledAt;		// 주문 취소 일시
-	
 	//===비즈니스 로직====//
 	public void order() {
-		this.item.removeStock(count);
-		this.orderedAt = LocalDateTime.now();
+		this.item.removeStock(this.quantity);
 	}
 	
 	public void cancel() {
-		this.item.addStock(count);
-		this.canceledAt = LocalDateTime.now();
+		this.item.addStock(this.quantity);
 	}
 	
 	public Integer getTotalPrice() {
-		return price * count;
+		return this.price * this.quantity;
+	}
+	
+	public String getItemMainBanner() {
+		return item.getMainBanner();
 	}
 
 }

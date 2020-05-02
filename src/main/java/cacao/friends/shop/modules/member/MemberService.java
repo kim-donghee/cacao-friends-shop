@@ -1,5 +1,7 @@
 package cacao.friends.shop.modules.member;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -74,14 +76,15 @@ public class MemberService  implements UserDetailsService {
 	}
 	
 	public void login(Member member) {
-		UsernamePasswordAuthenticationToken token = 
-				new UsernamePasswordAuthenticationToken(new UserMember(member), member.getPassword(), 
-						List.of(new SimpleGrantedAuthority("ROLE_USER")));
+		List<SimpleGrantedAuthority>  authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+				UsernamePasswordAuthenticationToken token =
+				new UsernamePasswordAuthenticationToken(new UserMember(member), member.getPassword(), UserMember.memberAuthorities());
 		SecurityContext context = SecurityContextHolder.getContext();
 		context.setAuthentication(token);
 	}
 	
-	public void complateJoin(Member member) {
+	public void completeJoin(Member member) {
 		member.completeJoin();
 	}
 	

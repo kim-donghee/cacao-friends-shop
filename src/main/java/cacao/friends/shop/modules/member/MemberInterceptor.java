@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import cacao.friends.shop.modules.cart.CartService;
+import cacao.friends.shop.modules.cart.CartRepository;
 import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.category.CategoryRepository;
 import cacao.friends.shop.modules.notification.NotificationRepository;
@@ -33,7 +33,7 @@ public class MemberInterceptor implements HandlerInterceptor {
 	
 	private final NotificationRepository notificationRepository;
 	
-	private final CartService cartService;
+	private final CartRepository cartRepository;
 	
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
@@ -59,15 +59,14 @@ public class MemberInterceptor implements HandlerInterceptor {
 				modelAndView.addObject("notificationNumber", notificationNumber);
 				modelAndView.addObject("hasNotification", true);
 			}
+			
+			// 카트 알림
+			Long cartNumber = cartRepository.countByMember(currentMember);
+			if(cartNumber > 0) {
+				modelAndView.addObject("cartNumber", cartNumber);
+				modelAndView.addObject("hasCart", true);
+			}
 		}
-		
-		// 카트 알림
-		int cartNumber = cartService.countCart();
-		if(cartNumber > 0) {
-			modelAndView.addObject("cartNumber", cartNumber);
-			modelAndView.addObject("hasCart", true);
-		}
-		
 	}
 	
 	private boolean isRedirectView(ModelAndView modelAndView) {

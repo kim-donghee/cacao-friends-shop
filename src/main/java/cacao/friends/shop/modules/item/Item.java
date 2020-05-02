@@ -97,6 +97,7 @@ public class Item {
 		int resultStock = this.stockQuantity - quantity;
 		if(resultStock < 0) 
 			throw new NotEnoughStockException(this.name + " 의 재고가 부족합니다.");
+		this.stockQuantity = resultStock;
 	}
 	
 	// 제목 이미지 추가
@@ -141,7 +142,7 @@ public class Item {
 			this.publishedDateTime = LocalDateTime.now();
 		}
 		else {
-			throw new IllegalAccessError("상품을 공개할 수 없는 상태입니다. 상품이 이미 공개되었거나 판매 종료되었습니다.");
+			throw new RuntimeException("상품을 공개할 수 없는 상태입니다. 상품이 이미 공개되었거나 판매 종료되었습니다.");
 		}
 	}
 	
@@ -152,7 +153,7 @@ public class Item {
 			this.closedDateTime = LocalDateTime.now();
 		}
 		else {
-			throw new IllegalAccessError("상품을 판매 종료할 수 없는 상태입니다. 상품이 공개되지않았거나 이미 판매 종료되었습니다.");
+			throw new RuntimeException("상품을 판매 종료할 수 없는 상태입니다. 상품이 공개되지않았거나 이미 판매 종료되었습니다.");
 		}
 	}
 	
@@ -163,7 +164,7 @@ public class Item {
 			this.pausedDateTime = LocalDateTime.now();
 		}
 		else {
-			throw new IllegalAccessError("상품을 판매 일시 정지할 수 없는 상태입니다. 상품이 이미 판매 정지입니다.");
+			throw new RuntimeException("상품을 판매 일시 정지할 수 없는 상태입니다. 상품이 이미 판매 정지입니다.");
 		}
 	}
 	
@@ -173,7 +174,7 @@ public class Item {
 			this.paused = false;
 		}
 		else {
-			throw new IllegalAccessError("상품을 판매할 수 없는 상태입니다. 상품이 이미 판매 중입니다.");
+			throw new RuntimeException("상품을 판매할 수 없는 상태입니다. 상품이 이미 판매 중입니다.");
 		}
 	}
 

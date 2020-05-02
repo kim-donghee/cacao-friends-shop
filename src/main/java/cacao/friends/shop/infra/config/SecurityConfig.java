@@ -34,7 +34,7 @@ public class SecurityConfig {
 			http
 				.authorizeRequests()
 					.mvcMatchers("/member/login", "/member/join").anonymous()
-					.mvcMatchers("/member/settings/**", "/member/logout").authenticated()
+					.mvcMatchers("/member/settings/**", "/member/logout", "/cart/**", "/order/**").authenticated()
 					.mvcMatchers("/", "/member/**", "/search/**", "/item/**").permitAll()
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 					.and()

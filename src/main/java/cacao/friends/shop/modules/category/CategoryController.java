@@ -1,7 +1,6 @@
 package cacao.friends.shop.modules.category;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -27,9 +26,9 @@ public class CategoryController {
 	
 	private final ModelMapper modelMapper;
 	
-	private final String topCategoryPriffix = "/manager/topCategory";
+	private final String topCategoryPrefix = "/manager/topCategory";
 
-	private final String subCategoryPriffix = "/manager/subCategory";
+	private final String subCategoryPrefix = "/manager/subCategory";
 	
 	@GetMapping("/manager/category")
 	public String view() {
@@ -39,15 +38,15 @@ public class CategoryController {
 	@PostMapping(value = "/manager/category/update/{id}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody CategoryDto dto) {
-		Optional<Category> byId = categoryRepository.findById(id);
-		if(byId.isEmpty()) {
+		Category findCategory = categoryRepository.findById(id).get();
+		if(findCategory == null) {
 			return ResponseEntity.badRequest().build();
 		}
 		
 		if(!categoryService.isValid(dto.getName()))
 			return ResponseEntity.badRequest().build();
 		
-		categoryService.updateCategory(byId.get(), dto.getName());
+		categoryService.updateCategory(findCategory, dto.getName());
 		
 		return ResponseEntity.ok().build();
 	}
@@ -55,27 +54,27 @@ public class CategoryController {
 	@PostMapping(value = "/manager/category/remove/{id}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> removeCategory(@PathVariable Long id) {
-		Optional<Category> byId = categoryRepository.findById(id);
-		if(byId.isEmpty()) {
+		Category findCategory = categoryRepository.findById(id).get();
+		if(findCategory == null) {
 			return ResponseEntity.badRequest().build();
 		}
 		
-		categoryService.removeCategory(byId.get());
+		categoryService.removeCategory(findCategory);
 		
 		return ResponseEntity.ok().build();
 	}
 	
 	//=== 1차 분류 카테고리 ===//
-	@GetMapping(value = topCategoryPriffix + "/search",
+	@GetMapping(value = topCategoryPrefix + "/search",
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CategoryReturnDto>> searchTopCategory() {
-		List<Category> topCategorys = categoryRepository.findByParentCategoryIsNull();
-		List<CategoryReturnDto>  returnDtos = 
-				topCategorys.stream().map(c -> modelMapper.map(c, CategoryReturnDto.class)).collect(Collectors.toList());
-		return ResponseEntity.ok(returnDtos);
+		List<Category> topCategories = categoryRepository.findByParentCategoryIsNull();
+		List<CategoryReturnDto>  returnDtoList =
+				topCategories.stream().map(c -> modelMapper.map(c, CategoryReturnDto.class)).collect(Collectors.toList());
+		return ResponseEntity.ok(returnDtoList);
 	}
 	
-	@PostMapping(value = topCategoryPriffix + "/save", 
+	@PostMapping(value = topCategoryPrefix + "/save", 
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CategoryReturnDto> saveTopCategory(@RequestBody CategoryDto dto) {
@@ -87,27 +86,28 @@ public class CategoryController {
 	}
 	
 	//=== 2차 분류 카테고리 ===//
-	@GetMapping(value = subCategoryPriffix + "/search/{parentId}",
+	@GetMapping(value = subCategoryPrefix + "/search/{parentId}",
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CategoryReturnDto>> searchSubCategory(@PathVariable Long parentId) {
-		List<Category> subCategorys = categoryRepository.findByParentCategoryId(parentId);
-		List<CategoryReturnDto>  returnDtos = 
-				subCategorys.stream().map(c -> modelMapper.map(c, CategoryReturnDto.class)).collect(Collectors.toList());
-		return ResponseEntity.ok(returnDtos);
+		List<Category> subCategories = categoryRepository.findByParentCategoryId(parentId);
+		List<CategoryReturnDto>  returnDtoList = 
+				subCategories.stream().map(c -> modelMapper.map(c, CategoryReturnDto.class)).collect(Collectors.toList());
+		return ResponseEntity.ok(returnDtoList);
 	}
 	
-	@PostMapping(value = subCategoryPriffix + "/save/{parentId}", 
+	@PostMapping(value = subCategoryPrefix + "/save/{parentId}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CategoryReturnDto> saveSubCategory(@PathVariable Long parentId, @RequestBody CategoryDto dto) {
-		Optional<Category> byId = categoryRepository.findById(parentId);
-		if(byId.isEmpty()) 
+		Category parentCategory = categoryRepository.findById(parentId).get();
+		if(parentCategory == null) {
 			return ResponseEntity.badRequest().build();
+		}
 		
 		if(!categoryService.isValid(dto.getName()))
 			return ResponseEntity.badRequest().build();
 		
-		CategoryReturnDto returnDto = categoryService.createSubCategory(byId.get(), dto.getName());
+		CategoryReturnDto returnDto = categoryService.createSubCategory(parentCategory, dto.getName());
 		return ResponseEntity.ok(returnDto);
 	}
 	
