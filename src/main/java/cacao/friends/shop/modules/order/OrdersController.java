@@ -42,7 +42,7 @@ public class OrdersController {
 	@GetMapping
 	public String ordersView(@CurrentMember Member member, Model model) {
 		model.addAttribute(member);
-		model.addAttribute(ordersRepository.findWithItemByMember(member));
+		model.addAttribute("orderList", ordersRepository.findWithItemAndDeliveryByMember(member));
 		return "member/order/list";
 	}
 	

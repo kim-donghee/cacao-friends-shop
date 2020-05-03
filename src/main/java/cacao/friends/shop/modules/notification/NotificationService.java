@@ -33,4 +33,9 @@ public class NotificationService {
 			n.read();
 		});
 	}
+	
+	public void oldNotificationRemove(Member member) {
+		notificationRepository.deleteByMemberAndChecked(member, true);
+	}
+	
 }

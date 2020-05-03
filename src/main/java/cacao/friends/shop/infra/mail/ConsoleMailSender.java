@@ -4,18 +4,16 @@ import java.io.InputStream;
 
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Profile({"local", "dev"})
-@Component
+//@Profile({"local", "dev"})
+//@Component
 public class ConsoleMailSender implements JavaMailSender {
 
 	@Override

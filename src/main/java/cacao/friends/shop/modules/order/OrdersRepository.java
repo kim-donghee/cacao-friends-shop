@@ -11,7 +11,7 @@ import cacao.friends.shop.modules.member.Member;
 @Transactional(readOnly = true)
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 	
-	@EntityGraph(attributePaths = { "ordersItems.item" })
-	List<Orders> findWithItemByMember(Member member);
+	@EntityGraph(attributePaths = { "ordersItems.item", "delivery"})
+	List<Orders> findWithItemAndDeliveryByMember(Member member);
 
 }

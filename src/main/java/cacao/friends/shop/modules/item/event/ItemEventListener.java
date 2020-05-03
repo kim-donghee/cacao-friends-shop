@@ -43,17 +43,17 @@ public class ItemEventListener {
 		String host = appProperties.getHost();
 		
 		members.forEach(a -> {
+			if(a.isItemCreatedByWeb()) {
+				notificationService.createNotification(a, "새로운 상품이 출시했습니다.", item.getName(), 
+						"/item/" + item.getId());
+			}
+			
 			if(a.isItemCreatedByEmail()) {
 				SimpleMailMessage mailMessage = new SimpleMailMessage();
 				mailMessage.setTo(a.getEmail());
 				mailMessage.setSubject("새로운 상품이 출시했습니다." + item.getName());
 				mailMessage.setText(item.getShortDescript() + " - " + (host));
 				javaMailSender.send(mailMessage);
-			}
-			
-			if(a.isItemCreatedByWeb()) {
-				notificationService.createNotification(a, "새로운 상품이 출시했습니다." + item.getName(), 
-						item.getShortDescript(), "/search/" + item.getId());
 			}
 		});
 	}
