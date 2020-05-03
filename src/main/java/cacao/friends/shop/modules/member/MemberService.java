@@ -1,12 +1,9 @@
 package cacao.friends.shop.modules.member;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -18,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cacao.friends.shop.infra.mail.EmailMessage;
+import cacao.friends.shop.infra.mail.EmailService;
 import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.member.form.JoinForm;
@@ -33,7 +32,7 @@ public class MemberService  implements UserDetailsService {
 	
 	private final ModelMapper modelMapper;
 	
-	private final JavaMailSender javaMailSender;
+	private final EmailService emailService;
 	
 	private final PasswordEncoder passwordEncoder;
 	
@@ -54,25 +53,31 @@ public class MemberService  implements UserDetailsService {
 	public Member saveNewAccount(JoinForm joinForm) {
 		joinForm.setPassword(passwordEncoder.encode(joinForm.getPassword()));
 		Member member = modelMapper.map(joinForm, Member.class);
-		
 		member.generateEmailToken();
-		
-		Member newAccount = memberRepository.save(member);
-
-		sendJoinConfirmEmail(newAccount, "Cacao Friends Shop, 회원 가입 인증", 
-				"/member/check-email-token?token=" + newAccount.getEmailCheckToken() +
-				"&email=" + newAccount.getEmail());
-		
-		return newAccount;
+		Member newMember = memberRepository.save(member);
+		sendEmail(newMember, "Cacao Friends Shop, 회원 가입 인증", 
+				"/member/check-email-token?token=" + newMember.getEmailCheckToken() + 
+				"&email=" + newMember.getEmail(), "이메일 인증하기", "서비스를 사용하려면 '이메일 인증하기'를 클릭해주세요.");
+		return newMember;
 	}
-
+	
+	// 패스워드 없이 로그인하기 위해 가입한 이메일에 토큰을 만들어서 전송
+	public void sendLoginLink(Member member) {
+		member.generateEmailToken();
+		sendEmail(member, "Cacao Friends Shop, 로그인 링크", 
+				"/member/login-by-email?token=" + member.getEmailCheckToken() + "&email=" + member.getEmail(), 
+				"로그인 링크", "Cacao Friends Shop에 로그인 하려면 '로그인 링크'를 클릭해주세요.");
+	}
+	
 	// 메시지 전송
-	private void sendJoinConfirmEmail(Member member, String subject, String message) {
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(member.getEmail());
-		mailMessage.setSubject(subject);
-		mailMessage.setText(message);
-		javaMailSender.send(mailMessage);
+	private void sendEmail(Member member, String subject, String link, String linkName, String message) {
+		String text = emailService.createText(member.getUsername(), link, linkName, message);
+		EmailMessage emailMessage = EmailMessage.builder()
+				.to(member.getEmail())
+				.subject(subject)
+				.text(text)
+				.build();
+		emailService.sendEmail(emailMessage);
 	}
 	
 	public void login(Member member) {
@@ -102,14 +107,6 @@ public class MemberService  implements UserDetailsService {
 		modelMapper.map(notificationsForm, member);
 		member.setPickCharacter(pickCharacter);
 		memberRepository.save(member);
-	}
-	
-	// 패스워드 없이 로그인하기 위해 가입한 이메일에 토큰을 만들어서 전송
-	public void sendLoginLink(Member member) {
-		member.generateEmailToken();
-		sendJoinConfirmEmail(member, "Cacao Friends Shop, 이메일 인증",
-				"/member/login-by-email?token=" + member.getEmailCheckToken() +
-				"&email=" + member.getEmail());		
 	}
 
 }

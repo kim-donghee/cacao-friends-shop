@@ -3,13 +3,12 @@ package cacao.friends.shop.modules.item.event;
 import java.util.List;
 
 import org.springframework.context.event.EventListener;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import cacao.friends.shop.infra.config.AppProperties;
+import cacao.friends.shop.infra.mail.EmailMessage;
+import cacao.friends.shop.infra.mail.EmailService;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.ItemRepository;
@@ -30,9 +29,7 @@ public class ItemEventListener {
 	
 	private final NotificationService notificationService;
 	
-	private final JavaMailSender javaMailSender;
-	
-	private final AppProperties appProperties;
+	private final EmailService emailService;
 	
 	@EventListener
 	public void handlerItemPublishEvent(ItemPublishEvent event) {
@@ -40,20 +37,22 @@ public class ItemEventListener {
 		CharacterKind character = item.getCharacter();
 		List<Member> members = memberRepository.findByPickCharacter(character);
 		
-		String host = appProperties.getHost();
-		
-		members.forEach(a -> {
-			if(a.isItemCreatedByWeb()) {
-				notificationService.createNotification(a, "새로운 상품이 출시했습니다.", item.getName(), 
+		members.forEach(m -> {
+			if(m.isItemCreatedByWeb()) {
+				notificationService.createNotification(m, "새로운 상품이 출시했습니다.", item.getName(), 
 						"/item/" + item.getId());
 			}
 			
-			if(a.isItemCreatedByEmail()) {
-				SimpleMailMessage mailMessage = new SimpleMailMessage();
-				mailMessage.setTo(a.getEmail());
-				mailMessage.setSubject("새로운 상품이 출시했습니다." + item.getName());
-				mailMessage.setText(item.getShortDescript() + " - " + (host));
-				javaMailSender.send(mailMessage);
+			if(m.isItemCreatedByEmail()) {
+				String text = emailService.createText(m.getUsername(), "/item/" + item.getId(), 
+						item.getName(), "새로운 상품 '" + item.getName() + "' 을 눌러서 확인하세요.");
+				
+				EmailMessage emailMessage = EmailMessage.builder()
+						.to(m.getEmail())
+						.subject("새로운 상품이 출시했습니다. " + item.getName())
+						.text(text)
+						.build();
+				emailService.sendEmail(emailMessage);
 			}
 		});
 	}
