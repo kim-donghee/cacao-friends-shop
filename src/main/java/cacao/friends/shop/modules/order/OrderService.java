@@ -36,7 +36,7 @@ public class OrderService {
 		Delivery delivery = new Delivery();
 		delivery.updateAddress(form.getAddress());
 		modelMapper.map(form, delivery);
-		delivery.setStatus(DeliveryStatus.COMP);
+		delivery.setStatus(DeliveryStatus.READY);
 		saveOrder.updateDelivery(delivery);
 		em.persist(delivery);
 		
@@ -68,7 +68,7 @@ public class OrderService {
 		em.persist(orderItem);
 		
 		modelMapper.map(form, delivery);
-		delivery.setStatus(DeliveryStatus.COMP);
+		delivery.setStatus(DeliveryStatus.READY);
 		saveOrder.updateDelivery(delivery);
 		em.persist(delivery);
 		

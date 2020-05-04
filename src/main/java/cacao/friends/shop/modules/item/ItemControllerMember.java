@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class ItemSearchController {
+public class ItemControllerMember {
 	
 	private final ItemRepository itemRepository;
 	

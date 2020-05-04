@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-public class CategoryController {
+public class CategoryControllerManager {
 	
 	private final CategoryRepository categoryRepository;
 	

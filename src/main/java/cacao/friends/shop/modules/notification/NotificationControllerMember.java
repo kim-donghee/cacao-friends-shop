@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/notifications")
-public class NotificationController {
+public class NotificationControllerMember {
 	
 	private final NotificationRepository notificationRepository;
 	

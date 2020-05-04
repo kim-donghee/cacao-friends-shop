@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/manager/character")
 @RequiredArgsConstructor
-public class CharacterKindController {
+public class CharacterKindControllerManager {
 	
 	private final CharacterKindRepository characterRepository;
 	

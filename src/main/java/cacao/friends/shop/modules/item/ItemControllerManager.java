@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/manager/item")
-public class ItemController {
+public class ItemControllerManager {
 	
 	private final ItemRepository itemRepository;
 	

@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/order")
 @RequiredArgsConstructor
 @SessionAttributes( {"cartSearchForm"} )
-public class OrdersController {
+public class OrdersControllerMember {
 	
 	private final OrdersRepository ordersRepository;
 	
@@ -42,7 +42,7 @@ public class OrdersController {
 	@GetMapping
 	public String ordersView(@CurrentMember Member member, Model model) {
 		model.addAttribute(member);
-		model.addAttribute("orderList", ordersRepository.findWithItemAndDeliveryByMember(member));
+		model.addAttribute("orderList", ordersRepository.findWithItemAndDeliveryByMemberOrderByOrderedAtDesc(member));
 		return "member/order/list";
 	}
 	
@@ -90,6 +90,13 @@ public class OrdersController {
 		}
 		orderService.directOrder(member, item, orderForm, quantity);
 		return "redirect:/";
+	}
+	
+	@PostMapping("/cancel/{id}")
+	public String orderCancel(@CurrentMember Member member, @PathVariable Long id) {
+		Orders order = ordersRepository.findWithItemAndDeliveryByIdAndMember(id, member);
+		orderService.cancel(order);
+		return "redirect:/order";
 	}
 
 }
