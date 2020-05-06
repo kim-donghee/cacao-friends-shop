@@ -19,7 +19,7 @@ import cacao.friends.shop.modules.member.MemberService;
 import cacao.friends.shop.modules.member.form.JoinForm;
 
 @ActiveProfiles("local")
-@SpringBootTest
+//@SpringBootTest
 @Transactional
 public class AccountServiceTest {
 	

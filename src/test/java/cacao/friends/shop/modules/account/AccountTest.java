@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import cacao.friends.shop.modules.address.Address;
 import cacao.friends.shop.modules.member.Member;
 
-@SpringBootTest
+//@SpringBootTest
 public class AccountTest {
 	
 	@DisplayName("회원 가입 - 이메일 인증 성공")
