@@ -30,22 +30,22 @@ public class ItemControllerMember {
 	
 	@GetMapping("/search")
 	public String itemSearchView(ItemSearchForm itemSearchForm, @RequestParam(defaultValue = "0") int page, Model model) {
-		ItemCondition itemCondition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		itemCondition.settingItemStatus(itemSearchForm.getItemSatus());
+		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
+		condition.settingItemStatus(itemSearchForm.getItemSatus());
 		Pageable pageable = createPageable(itemSearchForm.getSortProperty(), page, 9);
 		
 		model.addAttribute("sortProperty", itemSearchForm.getSortProperty());
 		model.addAttribute("characterId", itemSearchForm.getCharacterId());
 		model.addAttribute("keyword", itemSearchForm.getKeyword());
-		model.addAttribute("itemPage", itemRepository.findAll(ItemSpec.itemCondition(itemCondition), pageable));
+		model.addAttribute("itemPage", itemRepository.findByCondition(condition, pageable));
 		model.addAttribute("characterList", characterKindRepository.findAll());
 		return "member/search";
 	}
 	
 	@GetMapping("/items")
 	public String itemsView(ItemSearchForm itemSearchForm, @RequestParam(defaultValue = "0") int page, Model model) {
-		ItemCondition itemCondition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		itemCondition.settingItemStatus(itemSearchForm.getItemSatus());
+		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
+		condition.settingItemStatus(itemSearchForm.getItemSatus());
 		Pageable pageable = createPageable(itemSearchForm.getSortProperty(), page, 9);
 		
 		model.addAttribute("sortProperty", itemSearchForm.getSortProperty());
@@ -53,7 +53,7 @@ public class ItemControllerMember {
 		model.addAttribute("categoryId", itemSearchForm.getCategoryId());
 		model.addAttribute("subCategoryId", itemSearchForm.getSubCategoryId());
 		model.addAttribute("subCategoryList", categoryRepository.findByParentCategoryId(itemSearchForm.getCategoryId()));
-		model.addAttribute("itemPage", itemRepository.findAll(ItemSpec.itemCondition(itemCondition), pageable));
+		model.addAttribute("itemPage", itemRepository.findByCondition(condition, pageable));
 		model.addAttribute("characterList", characterKindRepository.findAll());
 		return "member/items";
 	}
