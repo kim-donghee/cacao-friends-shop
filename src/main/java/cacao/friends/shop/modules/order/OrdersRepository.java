@@ -9,12 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import cacao.friends.shop.modules.member.Member;
 
 @Transactional(readOnly = true)
-public interface OrdersRepository extends JpaRepository<Orders, Long> {
+public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersRepositoryExtension {
 	
 	@EntityGraph(attributePaths = { "ordersItems.item", "delivery"})
 	List<Orders> findWithItemAndDeliveryByMemberOrderByOrderedAtDesc(Member member);
 	
 	@EntityGraph(attributePaths = { "ordersItems.item", "delivery"})
 	Orders findWithItemAndDeliveryByIdAndMember(Long id, Member member);
-
+	
 }
