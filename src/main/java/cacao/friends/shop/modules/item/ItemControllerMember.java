@@ -31,7 +31,7 @@ public class ItemControllerMember {
 	@GetMapping("/search")
 	public String itemSearchView(ItemSearchForm itemSearchForm, @RequestParam(defaultValue = "0") int page, Model model) {
 		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		condition.settingItemStatus(itemSearchForm.getItemSatus());
+		condition.settingItemStatus(itemSearchForm.getItemStatus());
 		Pageable pageable = createPageable(itemSearchForm.getSortProperty(), page, 9);
 		
 		model.addAttribute("sortProperty", itemSearchForm.getSortProperty());
@@ -45,7 +45,7 @@ public class ItemControllerMember {
 	@GetMapping("/items")
 	public String itemsView(ItemSearchForm itemSearchForm, @RequestParam(defaultValue = "0") int page, Model model) {
 		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		condition.settingItemStatus(itemSearchForm.getItemSatus());
+		condition.settingItemStatus(itemSearchForm.getItemStatus());
 		Pageable pageable = createPageable(itemSearchForm.getSortProperty(), page, 9);
 		
 		model.addAttribute("sortProperty", itemSearchForm.getSortProperty());

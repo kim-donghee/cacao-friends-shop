@@ -44,6 +44,14 @@ public class CartController {
 		return "redirect:/item/" + itemId;
 	}
 	
+	@PostMapping(value = "/cart/add/{itemId}",
+			consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> addCart(@CurrentMember Member member, @PathVariable Long itemId, @RequestBody CartForm cartForm) {
+		Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("해당하는 상품이 없습니다."));
+		cartService.createCart(item, member, cartForm.getQuantity());
+		return ResponseEntity.ok().body(cartRepository.countByMember(member));
+	}
+	
 	@PostMapping("/cart/remove/{id}")
 	public String removeCart(@PathVariable Long id) {
 		Cart cart = cartRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 카트가 없습니다."));

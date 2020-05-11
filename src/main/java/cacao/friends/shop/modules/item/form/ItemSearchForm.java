@@ -10,7 +10,7 @@ public class ItemSearchForm {
 	
 	private String sortProperty;
 	
-	private String itemSatus;
+	private String itemStatus;
 	
 	private String keyword;
 	

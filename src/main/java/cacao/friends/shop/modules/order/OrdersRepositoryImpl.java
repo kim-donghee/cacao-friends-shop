@@ -23,19 +23,34 @@ public class OrdersRepositoryImpl extends QuerydslRepositorySupport implements O
 		
 		JPQLQuery<Orders> query = from(order);
 		query.leftJoin(order.delivery, delivery).fetchJoin();
-		
-		if(condition.getOrderStatus() != null)
-			query.where(order.orderStatus.eq(condition.getOrderStatus()));
-		
-		if(condition.getName() != null) 
-			query.where(delivery.name.like("%" + condition.getName() + "%"));
-		
-		if(condition.getDeliveryStatus() != null)
-			query.where(delivery.status.eq(condition.getDeliveryStatus()));
+		whereCondition(query, condition, order, delivery);
 		
 		JPQLQuery<Orders> pageableQuery = getQuerydsl().applyPagination(pageable, query);
 		QueryResults<Orders> fetchResults = pageableQuery.fetchResults();
 		return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
+	}
+
+	@Override
+	public Long countByCondition(OrdersCondition condition) {
+		QOrders order = QOrders.orders;
+		QDelivery delivery = QDelivery.delivery;
+		
+		JPQLQuery<Long> query = getQuerydsl().createQuery();
+		query.select(order.count())
+			.from(order)
+			.leftJoin(order.delivery, delivery);
+		whereCondition(query, condition, order, delivery);
+		
+		return query.fetchOne();
+	}
+	
+	private void whereCondition(JPQLQuery<?> query, OrdersCondition condition, QOrders order, QDelivery delivery) {
+		if(condition.getOrderStatus() != null)
+			query.where(order.orderStatus.eq(condition.getOrderStatus()));
+		if(condition.getName() != null) 
+			query.where(delivery.name.like("%" + condition.getName() + "%"));
+		if(condition.getDeliveryStatus() != null)
+			query.where(delivery.status.eq(condition.getDeliveryStatus()));
 	}
 
 }

@@ -1,5 +1,7 @@
 package cacao.friends.shop.modules.item;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,5 +20,8 @@ public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositor
 	@Modifying(clearAutomatically = true)
 	@Query(value = "DELETE FROM item WHERE published = false", nativeQuery = true)
 	void undisclosedRemove();
+	
+	List<Item> findTop6ByPublishedAndPausedAndClosedOrderByPublishedDateTimeDesc(
+			boolean published, boolean paused, boolean closed);
 
 }

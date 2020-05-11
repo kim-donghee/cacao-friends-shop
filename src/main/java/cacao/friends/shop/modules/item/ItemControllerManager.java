@@ -52,10 +52,10 @@ public class ItemControllerManager {
 	public String itemsView(ItemSearchForm itemSearchForm, 
 			@PageableDefault(page = 0, size = 9, sort = "id", direction = Direction.DESC) Pageable pageable, Model model) {
 		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		condition.settingItemStatus(itemSearchForm.getItemSatus());
+		condition.settingItemStatus(itemSearchForm.getItemStatus());
 		
 		model.addAttribute("keyword", itemSearchForm.getKeyword());
-		model.addAttribute("itemSatus", itemSearchForm.getItemSatus());
+		model.addAttribute("itemSatus", itemSearchForm.getItemStatus());
 		model.addAttribute("itemPage", itemRepository.findByCondition(condition, pageable));
 		return "manager/item/list";
 	}

@@ -8,5 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface OrdersRepositoryExtension {
 	
 	public Page<Orders> findByCondition(OrdersCondition condition, Pageable pageable);
+	
+	public Long countByCondition(OrdersCondition condition);
 
 }

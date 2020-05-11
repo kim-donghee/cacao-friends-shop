@@ -14,6 +14,8 @@ public class OrdersCondition {
 	
 	private DeliveryStatus deliveryStatus;
 	
+	public OrdersCondition() { }
+	
 	public OrdersCondition(OrdersSearchForm orderSearchForm) {
 		this.name = orderSearchForm.getName();
 		// [READY(준비), COMP(배송), CANCEL(취소)]

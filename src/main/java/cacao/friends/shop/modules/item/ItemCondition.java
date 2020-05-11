@@ -20,8 +20,8 @@ public class ItemCondition {
 	
 	private Long subCategoryId;
 	
-	public void settingItemStatus(String itemSatus) {
-		switch (itemSatus) {
+	public void settingItemStatus(String itemStatus) {
+		switch (itemStatus) {
 		case "PUBLISHED":
 			this.published = true;
 			this.closed = false;

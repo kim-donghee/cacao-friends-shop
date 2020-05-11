@@ -26,17 +26,17 @@ public class ItemSearchHandlerMethodArgumentResolver implements HandlerMethodArg
 		
 		String sortProperty = webRequest.getParameter("sortProperty");
 		String keyword = webRequest.getParameter("keyword");
-		String itemSatus = webRequest.getParameter("itemSatus");
+		String itemStatus = webRequest.getParameter("itemStatus");
 		String characterId = webRequest.getParameter("characterId");
 		String categoryId = webRequest.getParameter("categoryId");
 		String subCategoryId = webRequest.getParameter("subCategoryId");
 		
 		if(sortProperty == null) sortProperty = "NEW";
-		if(itemSatus == null) itemSatus = "PUBLISHED";
+		if(itemStatus == null) itemStatus = "PUBLISHED";
 		
 		itemSearchForm.setSortProperty(sortProperty);
 		itemSearchForm.setKeyword(keyword);
-		itemSearchForm.setItemSatus(itemSatus);
+		itemSearchForm.setItemStatus(itemStatus);
 		
 		if(characterId != null && !"".equals(characterId))
 			itemSearchForm.setCharacterId(Long.parseLong(characterId));
@@ -47,8 +47,8 @@ public class ItemSearchHandlerMethodArgumentResolver implements HandlerMethodArg
 		if(subCategoryId != null && !"".equals(subCategoryId))
 			itemSearchForm.setSubCategoryId(Long.parseLong(subCategoryId));
 		
-		log.info(String.format("sortProperty = %s, keyword = %s, itemSatus = %s, character = %s, category = %s, category = %s,", 
-				sortProperty, keyword, itemSatus, characterId, categoryId, subCategoryId));
+		log.info(String.format("sortProperty = %s, keyword = %s, itemStatus = %s, character = %s, category = %s, category = %s,", 
+				sortProperty, keyword, itemStatus, characterId, categoryId, subCategoryId));
 		
 		return itemSearchForm;
 	}
