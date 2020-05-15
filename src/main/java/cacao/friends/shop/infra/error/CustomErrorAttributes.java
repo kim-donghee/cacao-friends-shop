@@ -26,6 +26,7 @@ public class CustomErrorAttributes extends DefaultErrorAttributes {
 		String path = (String) errorAttributes.get("path");
 		List<String> pathSplit = Arrays.asList(path.split("/"));
 		errorAttributes.put("redirectPath", "/");
+		System.out.println(errorAttributes);
 		if(pathSplit.size() < 2) 
 			return;
 		if(pathSplit.get(1).equals("manager")) 

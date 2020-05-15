@@ -1,15 +1,15 @@
 package cacao.friends.shop.modules.main;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +20,7 @@ import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Component
 @Transactional
 @RequiredArgsConstructor
@@ -52,19 +53,22 @@ public class DataApplicationRunner implements ApplicationRunner {
 	}
 
 	private void createCharacter() {
-		if (characterKindRepository.count() > 0)
-			return;
-		
-		try {
-			File apeachFile = resourceLoader.getResource("classpath:/static/images/character/category_apeach_on.png").getFile();
-			File conFile = resourceLoader.getResource("classpath:/static/images/character/category_con_on.png").getFile();
-			File frodoFile = resourceLoader.getResource("classpath:/static/images/character/category_frodo_on.png").getFile();
-			File jayzFile = resourceLoader.getResource("classpath:/static/images/character/category_jayz_on.png").getFile();
-			File muziFile = resourceLoader.getResource("classpath:/static/images/character/category_muzi_on.png").getFile();
-			File neoFile = resourceLoader.getResource("classpath:/static/images/character/category_neo_on.png").getFile();
-			File ryanFile = resourceLoader.getResource("classpath:/static/images/character/category_ryan_on.png").getFile();
-			File tubeFile = resourceLoader.getResource("classpath:/static/images/character/category_tube_on.png").getFile();
+		Long charCount = characterKindRepository.count();
+		log.info("character kind count {}", charCount);
 
+
+
+		try {
+			File apeachFile = getFileByPath("/static/images/character/category_apeach_on.png");
+			File conFile = getFileByPath("classpath:/static/images/character/category_con_on.png");
+			File frodoFile = getFileByPath("classpath:/static/images/character/category_frodo_on.png");
+			File jayzFile = getFileByPath("classpath:/static/images/character/category_jayz_on.png");
+			File muziFile = getFileByPath("classpath:/static/images/character/category_muzi_on.png");
+			File neoFile = getFileByPath("classpath:/static/images/character/category_neo_on.png");
+			File ryanFile = getFileByPath("classpath:/static/images/character/category_ryan_on.png");
+			File tubeFile = getFileByPath("classpath:/static/images/character/category_tube_on.png");
+			if (charCount > 0)
+				return;
 			List<CharacterKind> list = new ArrayList<>();
 			list.add(CharacterKind.builder().name("어피치").image(imageToBase64(apeachFile)).build());
 			list.add(CharacterKind.builder().name("콘").image(imageToBase64(conFile)).build());
@@ -75,7 +79,18 @@ public class DataApplicationRunner implements ApplicationRunner {
 			list.add(CharacterKind.builder().name("라이언").image(imageToBase64(ryanFile)).build());
 			list.add(CharacterKind.builder().name("튜브").image(imageToBase64(tubeFile)).build());
 			characterKindRepository.saveAll(list);
-		} catch (Exception e) {	}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+	}
+
+	private File getFileByPath(String path) throws Exception {
+		ClassPathResource resource = new ClassPathResource(path);
+		try {
+			return resource.getFile();
+		} catch (IOException e) {
+			throw new Exception(e);
+		}
 	}
 
 	private String imageToBase64(File file) {
