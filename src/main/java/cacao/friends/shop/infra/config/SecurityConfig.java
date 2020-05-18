@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
@@ -69,6 +70,9 @@ public class SecurityConfig {
 				.anonymous()
 					.principal("anonymouseUser")
 					.authorities("anonymouse")
+					.and()
+				.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
 			;
 		}
 		
@@ -118,7 +122,10 @@ public class SecurityConfig {
 					.userDetailsService(userDetailsService)
 					.tokenRepository(tokenRepository)
 					.and()
-				.userDetailsService(userDetailsService);
+				.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+					.and()
+				.userDetailsService(userDetailsService)
 			;
 		}
 	}

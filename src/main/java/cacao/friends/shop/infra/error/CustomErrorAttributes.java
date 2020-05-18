@@ -1,7 +1,5 @@
 package cacao.friends.shop.infra.error;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
@@ -24,13 +22,10 @@ public class CustomErrorAttributes extends DefaultErrorAttributes {
 	
 	private void addRedirectPath(Map<String, Object> errorAttributes) {
 		String path = (String) errorAttributes.get("path");
-		List<String> pathSplit = Arrays.asList(path.split("/"));
-		errorAttributes.put("redirectPath", "/");
-		System.out.println(errorAttributes);
-		if(pathSplit.size() < 2) 
-			return;
-		if(pathSplit.get(1).equals("manager")) 
+		if(path.startsWith("/manager"))
 			errorAttributes.put("redirectPath", "/manager");
+		else 
+			errorAttributes.put("redirectPath", "/");
 	}
 	
 }

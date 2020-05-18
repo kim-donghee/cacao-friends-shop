@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 
+import cacao.friends.shop.modules.delivery.DeliveryStatus;
+import cacao.friends.shop.modules.delivery.QDelivery;
 import cacao.friends.shop.modules.item.QItem;
 import cacao.friends.shop.modules.order.OrderStatus;
 import cacao.friends.shop.modules.order.QOrders;
@@ -52,6 +54,7 @@ public class CharacterKindRepositoryImpl extends QuerydslRepositorySupport imple
 		query.select(
 				Projections.constructor(CharacterLastWeekOrderSaleDto.class, character.name, order.count()))
 			.from(order)
+			.where(order.orderStatus.eq(OrderStatus.ORDER).or(order.orderStatus.isNull()))
 			.innerJoin(order.ordersItems, orderItem)
 			.innerJoin(orderItem.item, item)
 			.rightJoin(item.character, character)
