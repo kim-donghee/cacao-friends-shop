@@ -97,8 +97,13 @@ public class SecurityConfig {
 		protected void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
 					.mvcMatchers("/member/login", "/member/join").anonymous()
-					.mvcMatchers("/member/settings/**", "/member/logout", "/cart/**", "/order/**").hasRole("USER")
-					.mvcMatchers("/", "/member/**", "/search/**", "/item/**").permitAll()
+					.mvcMatchers(
+							"/member/settings/**", "/member/logout", "/cart/**", "/order/**",
+							"/question/new", "/question/edit", "/question/remove"
+						).hasRole("USER")
+					.mvcMatchers(
+							"/", "/member/**", "/search/**", "/item/**", "/question/**"
+						).permitAll()
 					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 					.and()
 				.formLogin()

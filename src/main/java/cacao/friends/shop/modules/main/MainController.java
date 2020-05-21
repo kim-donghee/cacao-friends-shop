@@ -14,12 +14,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
-import cacao.friends.shop.modules.characterKind.CharacterLastWeekOrderSaleDto;
+import cacao.friends.shop.modules.characterKind.CharacterOrderSaleDto;
 import cacao.friends.shop.modules.item.ItemCondition;
 import cacao.friends.shop.modules.item.ItemRepository;
 import cacao.friends.shop.modules.order.OrdersCondition;
 import cacao.friends.shop.modules.order.OrdersRepository;
 import cacao.friends.shop.modules.order.form.OrdersSearchForm;
+import cacao.friends.shop.modules.question.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -31,6 +32,8 @@ public class MainController {
 	private final CharacterKindRepository characterKindRepository;
 	
 	private final OrdersRepository ordersRepository;
+	
+	private final QuestionRepository questionRepository;
 	
 	private final ObjectMapper objectMapper;
 	
@@ -58,11 +61,11 @@ public class MainController {
 		ItemCondition itemCondition = new ItemCondition();
 		itemCondition.settingItemStatus("DRAFT");
 		
-		List<CharacterLastWeekOrderSaleDto> characterLastWeekOrderSaleList = 
+		List<CharacterOrderSaleDto> characterLastWeekOrderSaleList = 
 				characterKindRepository.findLastWeekOrderSale(lastWeekMonday, lastWeekSunday);
 		String lastWeekSaleList = objectMapper.writeValueAsString(characterLastWeekOrderSaleList);
 		
-		List<CharacterLastWeekOrderSaleDto> characterOrderSaleList = characterKindRepository.findOrderSale();
+		List<CharacterOrderSaleDto> characterOrderSaleList = characterKindRepository.findOrderSale();
 		String saleList = objectMapper.writeValueAsString(characterOrderSaleList);
 		
 		model.addAttribute("now", now);
@@ -72,6 +75,7 @@ public class MainController {
 		model.addAttribute("saleList", saleList);
 		model.addAttribute("newOrderCount", ordersRepository.countByCondition(orderCondition));
 		model.addAttribute("draftItemCount", itemRepository.countByCondition(itemCondition));
+		model.addAttribute("newQuestionCount", questionRepository.countByAnswered(false));
 		return "manager/index";
 	}
 	
