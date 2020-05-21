@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public interface CharacterKindRepositoryExtension {
 	
-	List<CharacterLastWeekOrderSaleDto> findLastWeekOrderSale(LocalDateTime from, LocalDateTime to);
+	List<CharacterOrderSaleDto> findLastWeekOrderSale(LocalDateTime from, LocalDateTime to);
 
-	List<CharacterLastWeekOrderSaleDto> findOrderSale();
+	List<CharacterOrderSaleDto> findOrderSale();
 	
 }

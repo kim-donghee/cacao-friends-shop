@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data @AllArgsConstructor
-public class CharacterLastWeekOrderSaleDto {
+public class CharacterOrderSaleDto {
 	
 	private String name;
 	
