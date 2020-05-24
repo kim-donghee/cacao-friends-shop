@@ -94,8 +94,8 @@ public class OrdersControllerMember {
 	
 	@PostMapping("/cancel/{id}")
 	public String orderCancel(@CurrentMember Member member, @PathVariable Long id) {
-		Orders order = ordersRepository.findWithItemAndDeliveryByIdAndMember(id, member);
-		orderService.cancel(order);
+		Orders order = ordersRepository.findWithItemAndDeliveryById(id);
+		orderService.cancel(order, member);
 		return "redirect:/order";
 	}
 

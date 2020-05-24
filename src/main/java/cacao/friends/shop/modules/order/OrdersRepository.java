@@ -15,6 +15,6 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersRep
 	List<Orders> findWithItemAndDeliveryByMemberOrderByOrderedAtDesc(Member member);
 	
 	@EntityGraph(attributePaths = { "ordersItems.item", "delivery"})
-	Orders findWithItemAndDeliveryByIdAndMember(Long id, Member member);
+	Orders findWithItemAndDeliveryById(Long id);
 	
 }

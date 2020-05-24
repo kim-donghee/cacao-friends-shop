@@ -1,8 +1,8 @@
 package cacao.friends.shop.modules.order;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -60,15 +60,19 @@ public class Orders {
 	
 	@OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
-	private Set<OrdersItem> ordersItems = new HashSet<>();
+	private List<OrdersItem> ordersItems = new ArrayList<>();
 	
 	//===비즈니스 로직===//
 	public void addItem(OrdersItem ordersItem) {
+		if(this.ordersItems.contains(ordersItem))
+			return;
 		this.ordersItems.add(ordersItem);
 		ordersItem.setOrders(this);
 	}
 	
 	public void removeItem(OrdersItem ordersItem) {
+		if(!this.ordersItems.contains(ordersItem))
+			return;
 		this.ordersItems.remove(ordersItem);
 		ordersItem.setOrders(null);
 	}
@@ -89,7 +93,7 @@ public class Orders {
 		});
 		
 		int itemCount = this.ordersItems.size();
-		OrdersItem ordersItem = this.ordersItems.iterator().next();
+		OrdersItem ordersItem = this.ordersItems.get(0);
 		String firstItemName = ordersItem.getItemName();
 		String firstItemMainBanner = ordersItem.getItemMainBanner();
 		
@@ -118,6 +122,18 @@ public class Orders {
 		this.canceledAt = LocalDateTime.now();
 		
 		this.orderStatus = OrderStatus.CANCEL;
+	}
+	
+	//
+	public void comp() {
+		if(this.orderStatus == OrderStatus.CANCEL)
+			throw new RuntimeException("주문 취소된 상품입니다.");
+		delivery.comp();
+	}
+	
+	// 현재고객이 주문고객가 동일여부
+	public boolean memberEq(Member member) {
+		return this.member.equals(member);
 	}
 
 }

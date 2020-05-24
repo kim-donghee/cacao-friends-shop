@@ -30,53 +30,63 @@ public class OrderService {
 	
 	private final ModelMapper modelMapper;
 	
+	// 주문
 	public void order(Member member, List<Cart> carts, OrderForm form) {
 		Orders saveOrder = ordersRepository.save(Orders.builder().member(member).build());
-
-		Delivery delivery = new Delivery();
-		delivery.updateAddress(form.getAddress());
-		modelMapper.map(form, delivery);
-		delivery.setStatus(DeliveryStatus.READY);
-		saveOrder.updateDelivery(delivery);
+		Delivery delivery = createDelivery(saveOrder, form);
 		em.persist(delivery);
-		
 		carts.forEach(c -> {
-			OrdersItem orderItem = OrdersItem.builder()
-				.item(c.getItem())
-				.quantity(c.getQuantity())
-				.itemName(c.getItemName())
-				.price(c.getItemPrice())
-				.build();
+			OrdersItem orderItem = createOrdersItem(c.getItem(), c.getQuantity());
 			saveOrder.addItem(orderItem);
 			em.persist(orderItem);
 		});
-
 		saveOrder.order();
 		cartService.remove(carts);
 	}
 
+	// 바로주문
 	public void directOrder(Member member, Item item, OrderForm form, int quantity) {
 		Orders saveOrder = ordersRepository.save(Orders.builder().member(member).build());
-		Delivery delivery = new Delivery();
-		OrdersItem orderItem = OrdersItem.builder()
+		Delivery delivery = createDelivery(saveOrder, form);
+		em.persist(delivery);
+		OrdersItem orderItem = createOrdersItem(item, quantity);
+		saveOrder.addItem(orderItem);
+		em.persist(orderItem);
+		saveOrder.order();
+	}
+	
+	// 주문고객이 주문 취소
+	public void cancel(Orders order, Member currentMember) {
+		if(!order.memberEq(currentMember)) 
+			throw new RuntimeException("주문 취소 권한이 없습니다.");
+		order.cancel();
+	}
+	
+	// 관리자가 주문 취소
+	public void cancel(Orders order) {
+		order.cancel();
+	}
+	
+	// 배송준비 -> 배송중
+	public void comp(Orders order) {
+		order.comp();
+	}
+	
+	private OrdersItem createOrdersItem(Item item, int quantity) {
+		return OrdersItem.builder()
 				.item(item)
 				.quantity(quantity)
 				.itemName(item.getName())
 				.price(item.getPrice())
 				.build();
-		saveOrder.addItem(orderItem);
-		em.persist(orderItem);
-		
-		modelMapper.map(form, delivery);
-		delivery.setStatus(DeliveryStatus.READY);
-		saveOrder.updateDelivery(delivery);
-		em.persist(delivery);
-		
-		saveOrder.order();
 	}
 	
-	public void cancel(Orders order) {
-		order.cancel();
+	private Delivery createDelivery(Orders order, OrderForm form) {
+		Delivery delivery = modelMapper.map(form, Delivery.class);
+		delivery.updateAddress(form.getAddress());
+		delivery.setStatus(DeliveryStatus.READY);
+		order.updateDelivery(delivery);
+		return delivery;
 	}
 
 }
