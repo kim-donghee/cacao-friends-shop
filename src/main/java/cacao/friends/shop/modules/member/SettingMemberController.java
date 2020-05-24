@@ -41,6 +41,12 @@ public class SettingMemberController {
 		webDataBinder.addValidators(passwordFormValidator);
 	}
 	
+	@GetMapping("/profile")
+	public String email(@CurrentMember Member member, Model model) {
+		model.addAttribute(member);
+		return "member/account/settings/profile";
+	}
+	
 	@GetMapping("/address")
 	public String updateAddressForm(@CurrentMember Member member, Model model) {
 		AddressForm addressForm = new AddressForm();
@@ -86,6 +92,7 @@ public class SettingMemberController {
 	
 	@GetMapping("/notifications")
 	public String updateNotificationsForm(@CurrentMember Member member, Model model) {
+		model.addAttribute(member);
 		model.addAttribute(modelMapper.map(member, NotificationsForm.class));
 		model.addAttribute("characterList", characterKindRepository.findAll());
 		return "member/account/settings/notifications";

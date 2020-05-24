@@ -56,6 +56,15 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+	/*
+	 * 가입 이메일 다시보내기
+	*/
+	@GetMapping("/resend-join-confirm-email")
+	public String resendJoinConfirmEmail(@CurrentMember Member member) {
+		memberService.sendJoinConfirmEmail(member);
+		return "redirect:/member/settings/profile";
+	}
+	
 	/**
 	 * 이메일, 토큰 정보를 확인 후 이메일 인증 계정으로 수정과 로그인
 	 */
@@ -96,7 +105,6 @@ public class MemberController {
 		attributes.addFlashAttribute("message", "이메일 인증 메일을 발송했습니다.");
 		return "redirect:/member/email-login";
 	}
-	
 	
 	/**
 	 * 이메일과 토큰 정보를 확인 후에 로그인

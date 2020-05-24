@@ -46,8 +46,9 @@ public class Member {
 	private String emailCheckToken;	// 이메일 인증 토큰
 	
 	private LocalDateTime emailCheckTokenGeneratedAt; // 이메일 검증 토큰 발급 일시
-	
-	private boolean emailVerified;		// 이메일 인증 여부
+	 
+	@Builder.Default
+	private boolean emailVerified = false;	// 이메일 인증 여부
 	
 	@Builder.Default
 	private boolean itemCreatedByEmail	= false; // 선호 캐릭터 이메일 알림 여부
