@@ -47,11 +47,8 @@ public class ItemEventListener {
 				String text = emailService.createText(m.getUsername(), "/item/" + item.getId(), 
 						item.getName(), "새로운 상품 '" + item.getName() + "' 을 눌러서 확인하세요.");
 				
-				EmailMessage emailMessage = EmailMessage.builder()
-						.to(m.getEmail())
-						.subject("새로운 상품이 출시했습니다. " + item.getName())
-						.text(text)
-						.build();
+				EmailMessage emailMessage = 
+						new EmailMessage(m.getEmail(), "새로운 상품이 출시했습니다. " + item.getName(), text);
 				emailService.sendEmail(emailMessage);
 			}
 		});

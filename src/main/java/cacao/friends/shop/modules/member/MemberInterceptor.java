@@ -42,7 +42,7 @@ public class MemberInterceptor implements HandlerInterceptor {
 			return;
 		if(MediaType.APPLICATION_JSON_VALUE.equals(request.getContentType()))
 			return;
-		if(isRedirectView(modelAndView) || !isAccountView(modelAndView)) 
+		if(isRedirectView(modelAndView) || isManagerView(modelAndView))
 			return;
 		
 		// 카테고리 
@@ -73,8 +73,8 @@ public class MemberInterceptor implements HandlerInterceptor {
 		return modelAndView.getViewName().startsWith("redirect:") || modelAndView.getView() instanceof RedirectView;
 	}
 	
-	private boolean isAccountView(ModelAndView modelAndView) {
-		return !(modelAndView.getViewName().startsWith("manager") || modelAndView.getViewName().startsWith("admin"));
+	private boolean isManagerView(ModelAndView modelAndView) {
+		return modelAndView.getViewName().startsWith("manager");
 	}
 
 }

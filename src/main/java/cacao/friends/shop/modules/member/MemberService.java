@@ -58,17 +58,13 @@ public class MemberService  implements UserDetailsService {
 	}
 	
 	public void sendJoinConfirmEmail(Member member) {
-		memberSendEmail.sendEmail(member, "Cacao Friends Shop, 회원 가입 인증", 
-				"/member/check-email-token?token=" + member.getEmailCheckToken() + 
-				"&email=" + member.getEmail(), "이메일 인증하기", "서비스를 사용하려면 '이메일 인증하기'를 클릭해주세요.");
+		memberSendEmail.sendJoinConfirmEmail(member);
 	}
 	
 	// 패스워드 없이 로그인하기 위해 가입한 이메일에 토큰을 만들어서 전송
 	public void sendLoginLink(Member member) {
 		member.generateEmailToken();
-		memberSendEmail.sendEmail(member, "Cacao Friends Shop, 로그인 링크", 
-				"/member/login-by-email?token=" + member.getEmailCheckToken() + "&email=" + member.getEmail(), 
-				"로그인 링크", "Cacao Friends Shop에 로그인 하려면 '로그인 링크'를 클릭해주세요.");
+		memberSendEmail.sendLoginLink(member);
 	}
 	
 	public void login(Member member) {

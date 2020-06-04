@@ -1,9 +1,10 @@
 package cacao.friends.shop.infra.mail;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Builder @Data
+@Data @NoArgsConstructor @AllArgsConstructor
 public class EmailMessage {
 	
 	private String to;
