@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import cacao.friends.shop.modules.category.dto.CategoryDto;
 import cacao.friends.shop.modules.category.dto.CategoryReturnDto;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/manager/category")
 public class CategoryControllerManager {
 	
 	private final CategoryRepository categoryRepository;
@@ -26,16 +28,12 @@ public class CategoryControllerManager {
 	
 	private final ModelMapper modelMapper;
 	
-	private final String topCategoryPrefix = "/manager/topCategory";
-
-	private final String subCategoryPrefix = "/manager/subCategory";
-	
-	@GetMapping("/manager/category")
+	@GetMapping
 	public String view() {
 		return "manager/category/index";
 	}
 	
-	@PostMapping(value = "/manager/category/update/{id}", 
+	@PostMapping(value = "/update/{id}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody CategoryDto dto) {
 		Category findCategory = categoryRepository.findById(id).get();
@@ -51,7 +49,7 @@ public class CategoryControllerManager {
 		return ResponseEntity.ok().build();
 	}
 	
-	@PostMapping(value = "/manager/category/remove/{id}", 
+	@PostMapping(value = "/remove/{id}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> removeCategory(@PathVariable Long id) {
 		Category findCategory = categoryRepository.findById(id).get();
@@ -65,7 +63,7 @@ public class CategoryControllerManager {
 	}
 	
 	//=== 1차 분류 카테고리 ===//
-	@GetMapping(value = topCategoryPrefix + "/search",
+	@GetMapping(value = "/top/search",
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CategoryReturnDto>> searchTopCategory() {
 		List<Category> topCategories = categoryRepository.findByParentCategoryIsNull();
@@ -74,7 +72,7 @@ public class CategoryControllerManager {
 		return ResponseEntity.ok(returnDtoList);
 	}
 	
-	@PostMapping(value = topCategoryPrefix + "/save", 
+	@PostMapping(value = "/top/save", 
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CategoryReturnDto> saveTopCategory(@RequestBody CategoryDto dto) {
@@ -86,7 +84,7 @@ public class CategoryControllerManager {
 	}
 	
 	//=== 2차 분류 카테고리 ===//
-	@GetMapping(value = subCategoryPrefix + "/search/{parentId}",
+	@GetMapping(value = "/sub/search/{parentId}",
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CategoryReturnDto>> searchSubCategory(@PathVariable Long parentId) {
 		List<Category> subCategories = categoryRepository.findByParentCategoryId(parentId);
@@ -95,7 +93,7 @@ public class CategoryControllerManager {
 		return ResponseEntity.ok(returnDtoList);
 	}
 	
-	@PostMapping(value = subCategoryPrefix + "/save/{parentId}", 
+	@PostMapping(value = "/sub/save/{parentId}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<CategoryReturnDto> saveSubCategory(@PathVariable Long parentId, @RequestBody CategoryDto dto) {
