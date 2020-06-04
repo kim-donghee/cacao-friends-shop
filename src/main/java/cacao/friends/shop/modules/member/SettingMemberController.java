@@ -103,10 +103,12 @@ public class SettingMemberController {
 			@Valid NotificationsForm notificationsForm, Errors errors, 
 			Model model, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
+			model.addAttribute(member);
 			model.addAttribute("characterList", characterKindRepository.findAll());
 			return "member/account/settings/notifications";
 		}
-		CharacterKind character = characterKindRepository.findById(notificationsForm.getCharacterId()).get();
+		CharacterKind character = characterKindRepository.findById(notificationsForm.getCharacterId())
+				.orElseThrow(() -> new IllegalArgumentException("해당하는 캐릭터가 존재하지 않습니다."));
 		memberService.updateNotifications(member, character, notificationsForm);
 		attributes.addFlashAttribute("message", "알림을 수정했습니다.");
 		return "redirect:/member/settings/notifications";
