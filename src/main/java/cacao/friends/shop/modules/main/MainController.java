@@ -15,8 +15,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.characterKind.CharacterOrderSaleDto;
-import cacao.friends.shop.modules.item.ItemCondition;
 import cacao.friends.shop.modules.item.ItemRepository;
+import cacao.friends.shop.modules.item.search.ItemCondition;
+import cacao.friends.shop.modules.item.search.ItemStatus;
 import cacao.friends.shop.modules.order.OrdersCondition;
 import cacao.friends.shop.modules.order.OrdersRepository;
 import cacao.friends.shop.modules.order.form.OrdersSearchForm;
@@ -42,12 +43,6 @@ public class MainController {
 		model.addAttribute("itemNew6", 
 				itemRepository.findTop6ByPublishedAndPausedAndClosedOrderByPublishedDateTimeDesc(true, false, false));
 		model.addAttribute("itemPopular6", itemRepository.findPopular());
-//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		if(principal != null) {
-//			if(principal instanceof UserMember) {
-//				model.addAttribute("itemPick6", itemRepository.findByMemberPick(((UserMember) principal).getMember()));
-//			}
-//		}
 		return "member/index";
 	}
 	
@@ -59,7 +54,7 @@ public class MainController {
 		
 		OrdersCondition orderCondition = new OrdersCondition(new OrdersSearchForm(null, "READY"));
 		ItemCondition itemCondition = new ItemCondition();
-		itemCondition.settingItemStatus("DRAFT");
+		itemCondition.settingItemStatus(ItemStatus.ALL);
 		
 		List<CharacterOrderSaleDto> characterLastWeekOrderSaleList = 
 				characterKindRepository.findLastWeekOrderSale(lastWeekMonday, lastWeekSunday);

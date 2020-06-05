@@ -6,9 +6,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -28,6 +25,9 @@ import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.item.form.ItemForm;
 import cacao.friends.shop.modules.item.form.ItemSearchForm;
+import cacao.friends.shop.modules.item.search.ItemCondition;
+import cacao.friends.shop.modules.item.search.ItemSearchDefault;
+import cacao.friends.shop.modules.item.search.ItemStatus;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -49,14 +49,12 @@ public class ItemControllerManager {
 	
 	// 상품 목록
 	@GetMapping
-	public String itemsView(ItemSearchForm itemSearchForm, 
-			@PageableDefault(page = 0, size = 9, sort = "id", direction = Direction.DESC) Pageable pageable, Model model) {
-		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		condition.settingItemStatus(itemSearchForm.getItemStatus());
-		
+	public String itemsView(@ItemSearchDefault(itemStatus = ItemStatus.ALL) ItemSearchForm itemSearchForm, 
+			Model model) {
+		ItemCondition condition = ItemCondition.createCondition(itemSearchForm);
 		model.addAttribute("keyword", itemSearchForm.getKeyword());
 		model.addAttribute("itemSatus", itemSearchForm.getItemStatus());
-		model.addAttribute("itemPage", itemRepository.findByCondition(condition, pageable));
+		model.addAttribute("itemPage", itemRepository.findByCondition(condition));
 		return "manager/item/list";
 	}
 	

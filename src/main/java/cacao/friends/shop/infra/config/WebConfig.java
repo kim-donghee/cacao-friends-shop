@@ -10,7 +10,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import cacao.friends.shop.modules.item.ItemSearchHandlerMethodArgumentResolver;
+import cacao.friends.shop.modules.item.search.ItemSearchHandlerMethodArgumentResolver;
 import cacao.friends.shop.modules.member.MemberInterceptor;
 import lombok.RequiredArgsConstructor;
 

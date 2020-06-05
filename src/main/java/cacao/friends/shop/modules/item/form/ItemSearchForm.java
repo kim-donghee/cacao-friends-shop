@@ -1,5 +1,7 @@
 package cacao.friends.shop.modules.item.form;
 
+import cacao.friends.shop.modules.item.search.ItemSortProperty;
+import cacao.friends.shop.modules.item.search.ItemStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,9 +10,9 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ItemSearchForm {
 	
-	private String sortProperty;
+	private ItemSortProperty sortProperty;
 	
-	private String itemStatus;
+	private ItemStatus itemStatus;
 	
 	private String keyword;
 	
@@ -19,5 +21,7 @@ public class ItemSearchForm {
 	private Long categoryId;
 	
 	private Long subCategoryId;
+	
+	private int page;
 
 }

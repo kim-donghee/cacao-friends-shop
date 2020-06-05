@@ -13,6 +13,7 @@ import com.querydsl.jpa.JPQLQuery;
 import cacao.friends.shop.modules.category.QCategory;
 import cacao.friends.shop.modules.characterKind.QCharacterKind;
 import cacao.friends.shop.modules.delivery.QDelivery;
+import cacao.friends.shop.modules.item.search.ItemCondition;
 import cacao.friends.shop.modules.member.Member;
 import cacao.friends.shop.modules.member.QMember;
 import cacao.friends.shop.modules.order.QOrders;
@@ -25,7 +26,8 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 	}
 
 	@Override
-	public Page<Item> findByCondition(ItemCondition condition, Pageable pageable) {
+	public Page<Item> findByCondition(ItemCondition condition) {
+		Pageable pageable = condition.getPageable();
 		QItem item = QItem.item;
 		JPQLQuery<Item> query = from(item);
 		whereCondition(query, condition, item);

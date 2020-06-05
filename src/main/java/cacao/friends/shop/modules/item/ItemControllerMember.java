@@ -1,19 +1,15 @@
 package cacao.friends.shop.modules.item;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import cacao.friends.shop.modules.category.CategoryRepository;
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.item.form.ItemSearchForm;
+import cacao.friends.shop.modules.item.search.ItemCondition;
+import cacao.friends.shop.modules.item.search.ItemSearchDefault;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -26,34 +22,28 @@ public class ItemControllerMember {
 	
 	private final CharacterKindRepository characterKindRepository;
 	
-	private final ModelMapper modelMapper;
-	
 	@GetMapping("/search")
-	public String itemSearchView(ItemSearchForm itemSearchForm, @RequestParam(defaultValue = "0") int page, Model model) {
-		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		condition.settingItemStatus(itemSearchForm.getItemStatus());
-		Pageable pageable = createPageable(itemSearchForm.getSortProperty(), page, 9);
+	public String itemSearchView(@ItemSearchDefault ItemSearchForm itemSearchForm, Model model) {
+		ItemCondition condition = ItemCondition.createCondition(itemSearchForm);
 		
-		model.addAttribute("sortProperty", itemSearchForm.getSortProperty());
+		model.addAttribute("sortProperty", itemSearchForm.getSortProperty().toString());
 		model.addAttribute("characterId", itemSearchForm.getCharacterId());
 		model.addAttribute("keyword", itemSearchForm.getKeyword());
-		model.addAttribute("itemPage", itemRepository.findByCondition(condition, pageable));
+		model.addAttribute("itemPage", itemRepository.findByCondition(condition));
 		model.addAttribute("characterList", characterKindRepository.findAll());
 		return "member/search";
 	}
 	
 	@GetMapping("/items")
-	public String itemsView(ItemSearchForm itemSearchForm, @RequestParam(defaultValue = "0") int page, Model model) {
-		ItemCondition condition = modelMapper.map(itemSearchForm, ItemCondition.class);
-		condition.settingItemStatus(itemSearchForm.getItemStatus());
-		Pageable pageable = createPageable(itemSearchForm.getSortProperty(), page, 9);
+	public String itemsView(@ItemSearchDefault ItemSearchForm itemSearchForm, Model model) {
+		ItemCondition condition = ItemCondition.createCondition(itemSearchForm);
 		
 		model.addAttribute("sortProperty", itemSearchForm.getSortProperty());
 		model.addAttribute("characterId", itemSearchForm.getCharacterId());
 		model.addAttribute("categoryId", itemSearchForm.getCategoryId());
 		model.addAttribute("subCategoryId", itemSearchForm.getSubCategoryId());
 		model.addAttribute("subCategoryList", categoryRepository.findByParentCategoryId(itemSearchForm.getCategoryId()));
-		model.addAttribute("itemPage", itemRepository.findByCondition(condition, pageable));
+		model.addAttribute("itemPage", itemRepository.findByCondition(condition));
 		model.addAttribute("characterList", characterKindRepository.findAll());
 		return "member/items";
 	}
@@ -64,22 +54,4 @@ public class ItemControllerMember {
 		model.addAttribute(item);
 		return "member/item";
 	}
-	
-	private Pageable createPageable(String sortProperty, int page, int size) {
-		Sort sort = Sort.unsorted();
-		// NEW, PRICE_ASC, PRICE_DESC
-		switch (sortProperty) {
-		case "NEW":
-			sort = Sort.by(Order.desc("id"));
-			break;
-		case "PRICE_ASC":
-			sort = Sort.by(Order.asc("price"));
-			break;
-		case "PRICE_DESC":
-			sort = Sort.by(Order.desc("price"));
-			break;
-		}
-		return PageRequest.of(page, size, sort);
-	}
-
 }
