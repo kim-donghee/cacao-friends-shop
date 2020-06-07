@@ -16,24 +16,29 @@ public class CartService {
 	
 	private final CartRepository cartRepository;
 	
-	public void createCart(Item item, Member member, int quantity) {
-		cartRepository.save(Cart.builder().item(item).member(member).quantity(quantity).build());
+	public Cart newCart(Member currentMember) {
+		return cartRepository.save(Cart.builder().member(currentMember).build());
 	}
 	
-	public void updateCart(Cart cart, int quantity) {
-		cart.setQuantity(quantity);
+	public void addCartItem(Cart cart, Item item, int quantity) {
+		CartItem cartItem = CartItem.builder().item(item).quantity(quantity).build();
+		cart.addCartItem(cartItem);
 	}
 	
-	public void remove(Cart cart) {
-		cartRepository.delete(cart);
+	public void changeQuantity(CartItem cartItem, int quantity) {
+		cartItem.changeQuantity(quantity);
 	}
 	
-	public void remove(List<Cart> carts) {
-		cartRepository.deleteAll(carts);
+	public void removeItem(CartItem removeCartItem) {
+		cartRepository.removeItem(removeCartItem);
 	}
 	
-	public void removeAll(Member member) {
-		cartRepository.deleteByMember(member);
+	public void removeItem(List<CartItem> removeCartItems) {
+		cartRepository.removeItem(removeCartItems);
+	}
+	
+	public void removeItemAll(Member currentMember) {
+		cartRepository.removeItemAll(currentMember);
 	}
 
 }

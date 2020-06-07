@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import cacao.friends.shop.modules.cart.Cart;
+import cacao.friends.shop.modules.cart.CartItem;
 import cacao.friends.shop.modules.cart.CartRepository;
 import cacao.friends.shop.modules.cart.form.CartSearchForm;
 import cacao.friends.shop.modules.item.Item;
@@ -50,7 +50,7 @@ public class OrdersControllerMember {
 	public String orderSheet(@CurrentMember Member member, CartSearchForm cartSearchForm, Model model) {
 		model.addAttribute(member);
 		model.addAttribute(new OrderForm());
-		model.addAttribute("cartList", cartRepository.findAllById(cartSearchForm.getId()));
+		model.addAttribute("cartItemList", cartRepository.findCartItemWithItem(member, cartSearchForm.getCartItemIds()));
 		return "member/order/sheet";
 	}
 	
@@ -58,10 +58,10 @@ public class OrdersControllerMember {
 	public String orderProcess(@CurrentMember Member member, CartSearchForm cartSearchForm, 
 			@Valid OrderForm orderForm, BindingResult result, 
 			SessionStatus sessionStatus, RedirectAttributes attributes, Model model) {
-		List<Cart> cartList = cartRepository.findAllById(cartSearchForm.getId());
+		List<CartItem> cartList = cartRepository.findCartItemWithItem(member, cartSearchForm.getCartItemIds());
 		if(result.hasErrors()) {
 			model.addAttribute(member);
-			model.addAttribute("cartList", cartList);
+			model.addAttribute("cartItemList", cartList);
 			return "member/order/sheet";
 		}
 		orderService.order(member, cartList, orderForm);

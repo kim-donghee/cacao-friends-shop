@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cacao.friends.shop.modules.cart.Cart;
+import cacao.friends.shop.modules.cart.CartItem;
 import cacao.friends.shop.modules.cart.CartService;
 import cacao.friends.shop.modules.delivery.Delivery;
 import cacao.friends.shop.modules.delivery.DeliveryStatus;
@@ -31,17 +31,17 @@ public class OrderService {
 	private final ModelMapper modelMapper;
 	
 	// 주문
-	public void order(Member member, List<Cart> carts, OrderForm form) {
+	public void order(Member member, List<CartItem> cartItems, OrderForm form) {
 		Orders saveOrder = ordersRepository.save(Orders.builder().member(member).build());
 		Delivery delivery = createDelivery(saveOrder, form);
 		em.persist(delivery);
-		carts.forEach(c -> {
-			OrdersItem orderItem = createOrdersItem(c.getItem(), c.getQuantity());
+		cartItems.forEach(ci -> {
+			OrdersItem orderItem = createOrdersItem(ci.getItem(), ci.getQuantity());
 			saveOrder.addItem(orderItem);
 			em.persist(orderItem);
 		});
 		saveOrder.order();
-		cartService.remove(carts);
+		cartService.removeItem(cartItems);
 	}
 
 	// 바로주문

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cacao.friends.shop.modules.cart.form.CartForm;
 import cacao.friends.shop.modules.cart.form.CartSearchForm;
@@ -32,52 +31,48 @@ public class CartController {
 	
 	@GetMapping("/cart")
 	public String cartView(@CurrentMember Member member, Model model) {
-		model.addAttribute("cartList", cartRepository.findWithItemByMember(member));
+		model.addAttribute("cart", cartRepository.findWithItemByMember(member));
 		return "member/cart";
-	}
-	
-	@PostMapping("/cart/add/{itemId}")
-	public String addCart(@CurrentMember Member member, @PathVariable Long itemId, CartForm cartForm, RedirectAttributes attributes) {
-		Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("해당하는 상품이 없습니다."));
-		cartService.createCart(item, member, cartForm.getQuantity());
-		attributes.addFlashAttribute("message", "카트에 추가했습니다.");
-		return "redirect:/item/" + itemId;
 	}
 	
 	@PostMapping(value = "/cart/add/{itemId}",
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addCart(@CurrentMember Member member, @PathVariable Long itemId, @RequestBody CartForm cartForm) {
+		Cart cart = cartRepository.findWithItemByMember(member);
+		if(cart == null) {
+			cart = cartService.newCart(member);
+		}
 		Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("해당하는 상품이 없습니다."));
-		cartService.createCart(item, member, cartForm.getQuantity());
-		return ResponseEntity.ok().body(cartRepository.countByMember(member));
+		cartService.addCartItem(cart, item, cartForm.getQuantity());
+		return ResponseEntity.ok().body(cartRepository.countCartItem(member));
 	}
 	
-	@PostMapping("/cart/remove/{id}")
-	public String removeCart(@PathVariable Long id) {
-		Cart cart = cartRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 카트가 없습니다."));
-		cartService.remove(cart);
+	@PostMapping("/cart/remove/{cartItemId}")
+	public String removeCart(@CurrentMember Member member, @PathVariable Long cartItemId) {
+		CartItem cartItem = cartRepository.findCartItem(member, cartItemId);
+		cartService.removeItem(cartItem);
 		return "redirect:/cart";
 	}
 	
 	@PostMapping("/cart/remove")
-	public String remove(@CurrentMember Member member, CartSearchForm form) {
-		List<Cart> cartList = cartRepository.findAllById(form.getId());
-		cartService.remove(cartList);
+	public String remove(@CurrentMember Member member, CartSearchForm cartSearchForm) {
+		List<CartItem> cartList = cartRepository.findCartItem(member, cartSearchForm.getCartItemIds());
+		cartService.removeItem(cartList);
 		return "redirect:/cart";
 	}
 	
 	@PostMapping("/cart/remove/all")
 	public String removeAll(@CurrentMember Member member) {
-		cartService.removeAll(member);
+		cartService.removeItemAll(member);
 		return "redirect:/cart";
 	}
 	
-	@PostMapping(value = "/cart/edit/{id}", 
+	@PostMapping(value = "/cart/edit/{cartItemId}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> editCart(@CurrentMember Member member, @PathVariable Long id, 
+	public ResponseEntity<?> editCart(@CurrentMember Member member, @PathVariable Long cartItemId, 
 			@RequestBody CartForm cartForm) {
-		Cart cart = cartRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당하는 카트가 없습니다."));
-		cartService.updateCart(cart, cartForm.getQuantity());
+		CartItem cartItem = cartRepository.findCartItem(member, cartItemId);
+		cartService.changeQuantity(cartItem, cartForm.getQuantity());
 		return ResponseEntity.ok().build();
 	}
 }

@@ -61,7 +61,7 @@ public class MemberInterceptor implements HandlerInterceptor {
 			}
 			
 			// 카트 알림
-			Long cartNumber = cartRepository.countByMember(currentMember);
+			Long cartNumber = cartRepository.countCartItem(currentMember);
 			if(cartNumber > 0) {
 				modelAndView.addObject("cartNumber", cartNumber);
 				modelAndView.addObject("hasCart", true);

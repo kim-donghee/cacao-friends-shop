@@ -1,12 +1,17 @@
 package cacao.friends.shop.modules.cart;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,20 +28,47 @@ public class Cart {
 	@Id @GeneratedValue
 	private Long id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Item item;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(unique = true)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Member member;
 	
-	private int quantity;
+	@Builder.Default
+	@OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CartItem> cartItems = new ArrayList<>();
 	
-	public String getItemName() {
-		return item.getName();
+	//===비즈니스 로직===//
+	// 카트 항목 추가
+	public void addCartItem(CartItem cartItem) {
+		if(cartItems.contains(cartItem))
+			return;
+		this.cartItems.add(cartItem);
+		cartItem.setCart(this);
 	}
 	
-	public Integer getItemPrice() {
-		return item.getPrice();
+	// 카트 항목 삭제
+	public void removeCartItem(CartItem cartItem) {
+		if(!cartItems.contains(cartItem))
+			return;
+		this.cartItems.remove(cartItem);
+		cartItem.setCart(null);
+	}
+	
+	// 카트 전체 항목 가격
+	public long totalPrice() {
+		long totalPrice = 0;
+		for(CartItem cartItem : cartItems) {
+			totalPrice += cartItem.getPrice();
+		}
+		return totalPrice;
+	}
+	
+	// 카트가 비어있는지 여부
+	public boolean isEmpty() {
+		return this.cartItems.isEmpty();
+	}
+	
+	public int cartItemCount() {
+		return this.cartItems.size();
 	}
 
 }

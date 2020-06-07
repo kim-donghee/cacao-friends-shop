@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class CartSearchForm {
 	
-	private List<Long> id;
+	private List<Long> cartItemIds;
 
 }
