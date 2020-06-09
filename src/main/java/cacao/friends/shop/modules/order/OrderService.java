@@ -26,15 +26,13 @@ public class OrderService {
 	// 주문
 	public void order(Member member, List<CartItem> cartItems, OrderForm form) {
 		Orders saveOrder = ordersRepository.save(Orders.builder().member(member).build());
-		saveOrder.order();
 		eventPublisher.publishEvent(new SheetOrderEvent(saveOrder, cartItems, form));
 	}
 
 	// 바로주문
 	public void directOrder(Member member, Item item, OrderForm form, int quantity) {
 		Orders saveOrder = ordersRepository.save(Orders.builder().member(member).build());
-		saveOrder.order();
-		eventPublisher.publishEvent(new DirectSheetOrderEvent(saveOrder, item, form));
+		eventPublisher.publishEvent(new DirectSheetOrderEvent(saveOrder, item, quantity, form));
 	}
 	
 	// 주문고객이 주문 취소

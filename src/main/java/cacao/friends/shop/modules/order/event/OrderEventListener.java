@@ -42,6 +42,8 @@ public class OrderEventListener {
 		delivery.setStatus(DeliveryStatus.READY);
 		order.updateDelivery(delivery);
 		
+		order.order();
+		
 		cartService.removeItem(cartItems);
 	}
 	
@@ -59,6 +61,7 @@ public class OrderEventListener {
 		delivery.updateAddress(orderForm.getAddress());
 		delivery.setStatus(DeliveryStatus.READY);
 		order.updateDelivery(delivery);
+		order.order();
 	}
 
 }

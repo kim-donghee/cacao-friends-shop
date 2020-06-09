@@ -14,7 +14,7 @@ public class DirectSheetOrderEvent {
 	
 	private final Item item;
 	
-	private Integer quantity;	
+	private final Integer quantity;	
 	
 	private final OrderForm orderForm;
 

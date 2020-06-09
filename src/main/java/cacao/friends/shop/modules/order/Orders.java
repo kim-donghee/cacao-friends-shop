@@ -55,7 +55,7 @@ public class Orders {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Member member;
 	
-	@OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Delivery delivery;			// 배송
 	
 	@OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
