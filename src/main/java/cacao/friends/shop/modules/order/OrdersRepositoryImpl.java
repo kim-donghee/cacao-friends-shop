@@ -9,6 +9,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 
 import cacao.friends.shop.modules.delivery.QDelivery;
+import cacao.friends.shop.modules.order.search.OrdersCondition;
 
 public class OrdersRepositoryImpl extends QuerydslRepositorySupport implements OrdersRepositoryExtension {
 

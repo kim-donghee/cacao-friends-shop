@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.order.form;
+package cacao.friends.shop.modules.order.search;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

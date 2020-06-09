@@ -1,7 +1,7 @@
-package cacao.friends.shop.modules.order;
+package cacao.friends.shop.modules.order.search;
 
 import cacao.friends.shop.modules.delivery.DeliveryStatus;
-import cacao.friends.shop.modules.order.form.OrdersSearchForm;
+import cacao.friends.shop.modules.order.OrderStatus;
 import lombok.Getter;
 import lombok.Setter;
 

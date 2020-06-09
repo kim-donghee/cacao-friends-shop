@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import cacao.friends.shop.modules.order.form.OrdersSearchForm;
+import cacao.friends.shop.modules.order.search.OrdersCondition;
+import cacao.friends.shop.modules.order.search.OrdersSearchForm;
 import lombok.RequiredArgsConstructor;
 
 @Controller
