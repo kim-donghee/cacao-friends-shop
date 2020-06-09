@@ -51,7 +51,7 @@ public class ItemControllerManager {
 	@GetMapping
 	public String itemsView(@ItemSearchDefault(itemStatus = ItemStatus.ALL) ItemSearchForm itemSearchForm, 
 			Model model) {
-		ItemCondition condition = ItemCondition.createCondition(itemSearchForm);
+		ItemCondition condition = new ItemCondition(itemSearchForm);
 		model.addAttribute("keyword", itemSearchForm.getKeyword());
 		model.addAttribute("itemSatus", itemSearchForm.getItemStatus());
 		model.addAttribute("itemPage", itemRepository.findByCondition(condition));

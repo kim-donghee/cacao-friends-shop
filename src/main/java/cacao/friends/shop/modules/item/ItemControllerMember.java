@@ -24,8 +24,7 @@ public class ItemControllerMember {
 	
 	@GetMapping("/search")
 	public String itemSearchView(@ItemSearchDefault ItemSearchForm itemSearchForm, Model model) {
-		ItemCondition condition = ItemCondition.createCondition(itemSearchForm);
-		
+		ItemCondition condition = new ItemCondition(itemSearchForm);
 		model.addAttribute("sortProperty", itemSearchForm.getSortProperty().toString());
 		model.addAttribute("characterId", itemSearchForm.getCharacterId());
 		model.addAttribute("keyword", itemSearchForm.getKeyword());
@@ -36,8 +35,7 @@ public class ItemControllerMember {
 	
 	@GetMapping("/items")
 	public String itemsView(@ItemSearchDefault ItemSearchForm itemSearchForm, Model model) {
-		ItemCondition condition = ItemCondition.createCondition(itemSearchForm);
-		
+		ItemCondition condition = new ItemCondition(itemSearchForm);
 		model.addAttribute("sortProperty", itemSearchForm.getSortProperty());
 		model.addAttribute("characterId", itemSearchForm.getCharacterId());
 		model.addAttribute("categoryId", itemSearchForm.getCategoryId());

@@ -6,9 +6,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
+@Getter
 public class ItemCondition {
 	
 	private String keyword;
@@ -27,15 +26,17 @@ public class ItemCondition {
 	
 	private Pageable pageable;
 	
-	public static ItemCondition createCondition(ItemSearchForm form) {
-		ItemCondition condition = new ItemCondition();
-		condition.setKeyword(form.getKeyword());
-		condition.setCharacterId(form.getCharacterId());
-		condition.setCategoryId(form.getCategoryId());
-		condition.setSubCategoryId(form.getSubCategoryId());
-		condition.settingItemStatus(form.getItemStatus());
-		condition.setPageable(condition.createPageable(form.getSortProperty(), form.getPage(), 9));
-		return condition;
+	private final Integer DEFAULT_SIZE = 9;
+	
+	public ItemCondition() { };
+	
+	public ItemCondition(ItemSearchForm itemSearchForm) {
+		this.keyword = itemSearchForm.getKeyword();
+		this.characterId = itemSearchForm.getCharacterId();
+		this.categoryId = itemSearchForm.getCategoryId();
+		this.subCategoryId = itemSearchForm.getSubCategoryId();
+		settingItemStatus(itemSearchForm.getItemStatus());
+		createPageable(itemSearchForm.getSortProperty(), itemSearchForm.getPage(), DEFAULT_SIZE);
 	}
 	
 	public void settingItemStatus(ItemStatus status) {
@@ -69,7 +70,7 @@ public class ItemCondition {
 		}
 	}
 	
-	private Pageable createPageable(ItemSortProperty sortProperty, int page, int size) {
+	private void createPageable(ItemSortProperty sortProperty, int page, int size) {
 		Sort sort = Sort.unsorted();
 		switch (sortProperty) {
 		case NEW:
@@ -82,7 +83,7 @@ public class ItemCondition {
 			sort = Sort.by(Order.desc("price"));
 			break;
 		}
-		return PageRequest.of(page, size, sort);
+		this.pageable = PageRequest.of(page, size, sort);
 	}
 	
 }
