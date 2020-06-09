@@ -34,6 +34,13 @@ public class OrdersItem {
 	
 	private String itemName;			// 상품 이름
 	
+	public OrdersItem(Item item, Integer quantity) {
+		this.item = item;
+		this.price = item.getPrice();
+		this.quantity = quantity;
+		this.itemName = item.getName();
+	}
+	
 	//===비즈니스 로직====//
 	public void order() {
 		this.item.removeStock(this.quantity);
