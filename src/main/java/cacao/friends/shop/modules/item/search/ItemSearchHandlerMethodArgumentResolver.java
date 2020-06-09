@@ -7,7 +7,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import cacao.friends.shop.modules.item.form.ItemSearchForm;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

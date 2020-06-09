@@ -1,7 +1,5 @@
-package cacao.friends.shop.modules.item.form;
+package cacao.friends.shop.modules.item.search;
 
-import cacao.friends.shop.modules.item.search.ItemSortProperty;
-import cacao.friends.shop.modules.item.search.ItemStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
