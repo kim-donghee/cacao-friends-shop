@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.category.CategoryRepository;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
-import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
+import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
 import lombok.RequiredArgsConstructor;
 
 @Slf4j

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.modules.characterKind.form.CharacterForm;
+import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

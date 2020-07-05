@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import cacao.friends.shop.infra.mail.EmailMessage;
 import cacao.friends.shop.infra.mail.EmailService;
+import cacao.friends.shop.infra.mail.EmailText;
 import lombok.RequiredArgsConstructor;
 
 @Async
@@ -14,8 +15,10 @@ public class MemberSendEmail {
 	
 	private final EmailService emailService;
 	
+	private final EmailText emailText;
+	
 	public void sendEmail(String username, String email, String subject, String link, String linkName, String message) {
-		String text = emailService.createText(username, link, linkName, message);
+		String text = emailText.create(username, link, linkName, message);
 		EmailMessage emailMessage = new EmailMessage(email, subject, text);
 		emailService.sendEmail(emailMessage);
 	}

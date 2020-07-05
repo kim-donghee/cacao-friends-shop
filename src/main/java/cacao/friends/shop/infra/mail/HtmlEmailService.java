@@ -7,10 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
-import cacao.friends.shop.infra.config.AppProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,10 +19,6 @@ public class HtmlEmailService implements EmailService {
 	
 	private final JavaMailSender javaMailSender;
 	
-	private final TemplateEngine templateEngine;
-	
-	private final AppProperties appProperties;
-
 	@Override
 	public void sendEmail(EmailMessage emailMessage) {
 		try {
@@ -40,17 +33,6 @@ public class HtmlEmailService implements EmailService {
 			log.error("failed to send email", e);
 			throw new RuntimeException();
 		}
-	}
-
-	@Override
-	public String createText(String username, String link, String linkName, String message) {
-		Context context = new Context();
-		context.setVariable("username", username);
-		context.setVariable("link", link);
-		context.setVariable("linkName", linkName);
-		context.setVariable("message", message);
-		context.setVariable("host", appProperties.getHost());
-		return templateEngine.process("member/mail/simple-link", context);	
 	}
 
 }

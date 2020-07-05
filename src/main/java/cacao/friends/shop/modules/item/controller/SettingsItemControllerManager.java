@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.category.CategoryRepository;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
-import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
+import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
 import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.ItemBanner;
 import cacao.friends.shop.modules.item.ItemCategory;

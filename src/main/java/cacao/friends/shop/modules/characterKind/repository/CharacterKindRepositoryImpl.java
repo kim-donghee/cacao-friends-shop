@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.characterKind;
+package cacao.friends.shop.modules.characterKind.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 
+import cacao.friends.shop.modules.characterKind.CharacterKind;
+import cacao.friends.shop.modules.characterKind.CharacterOrderSaleDto;
+import cacao.friends.shop.modules.characterKind.QCharacterKind;
 import cacao.friends.shop.modules.item.QItem;
 import cacao.friends.shop.modules.order.OrderStatus;
 import cacao.friends.shop.modules.order.QOrders;

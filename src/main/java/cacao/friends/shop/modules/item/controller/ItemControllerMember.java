@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import cacao.friends.shop.modules.category.CategoryRepository;
-import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
+import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
 import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.repository.ItemRepository;
 import cacao.friends.shop.modules.item.search.ItemCondition;

@@ -15,8 +15,4 @@ public class ConsoleEmailService implements EmailService {
 		log.info("sent email : {}", emailMessage.getText());
 	}
 
-	@Override
-	public String createText(String username, String link, String linkName, String message) {
-		return null;
-	}
 }

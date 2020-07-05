@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.member;
+package cacao.friends.shop.modules.member.controller;
 
 import javax.validation.Valid;
 
@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import cacao.friends.shop.modules.member.CurrentMember;
+import cacao.friends.shop.modules.member.Member;
+import cacao.friends.shop.modules.member.MemberRepository;
+import cacao.friends.shop.modules.member.MemberService;
 import cacao.friends.shop.modules.member.form.JoinForm;
 import cacao.friends.shop.modules.member.validator.JoinFormValidator;
 import lombok.RequiredArgsConstructor;

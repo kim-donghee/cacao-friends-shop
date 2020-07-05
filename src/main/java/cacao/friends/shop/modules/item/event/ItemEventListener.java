@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.infra.mail.EmailMessage;
 import cacao.friends.shop.infra.mail.EmailService;
+import cacao.friends.shop.infra.mail.EmailText;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.repository.ItemRepository;
@@ -31,6 +32,8 @@ public class ItemEventListener {
 	
 	private final EmailService emailService;
 	
+	private final EmailText emailText;
+	
 	@EventListener
 	public void handlerItemPublishEvent(ItemPublishEvent event) {
 		Item item = itemRepository.findById(event.getItem().getId()).get();
@@ -44,7 +47,7 @@ public class ItemEventListener {
 			}
 			
 			if(m.isItemCreatedByEmail()) {
-				String text = emailService.createText(m.getUsername(), "/item/" + item.getId(), 
+				String text = emailText.create(m.getUsername(), "/item/" + item.getId(), 
 						item.getName(), "새로운 상품 '" + item.getName() + "' 을 눌러서 확인하세요.");
 				
 				EmailMessage emailMessage = 

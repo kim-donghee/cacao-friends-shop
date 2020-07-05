@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cacao.friends.shop.modules.characterKind.form.CharacterForm;
+import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
 import lombok.RequiredArgsConstructor;
 
 @Controller

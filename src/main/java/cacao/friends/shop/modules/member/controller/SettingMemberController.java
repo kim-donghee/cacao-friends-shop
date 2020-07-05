@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.member;
+package cacao.friends.shop.modules.member.controller;
 
 import javax.validation.Valid;
 
@@ -15,7 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
-import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
+import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
+import cacao.friends.shop.modules.member.CurrentMember;
+import cacao.friends.shop.modules.member.Member;
+import cacao.friends.shop.modules.member.MemberService;
 import cacao.friends.shop.modules.member.form.NotificationsForm;
 import cacao.friends.shop.modules.member.form.PasswordForm;
 import cacao.friends.shop.modules.member.validator.PasswordFormValidator;
