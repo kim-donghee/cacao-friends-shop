@@ -115,12 +115,17 @@ public class Item {
 		this.banners.remove(banner);
 		banner.setItem(null);
 		
-		if(banner.getImage().equals(this.mainBanner)) {
+		if(banner.equalsImage(this.mainBanner)) {
 			this.mainBanner = null;
 			if(this.banners.iterator().hasNext()) {
-				this.mainBanner = this.banners.iterator().next().getImage();
+				updateMainBanner(this.banners.iterator().next().getImage());;
 			}
 		}
+	}
+	
+	// 메인 제목 이미지 변경
+	public void updateMainBanner(String mainBanner) {
+		this.mainBanner = mainBanner;
 	}
 	
 	// 카테고리 추가

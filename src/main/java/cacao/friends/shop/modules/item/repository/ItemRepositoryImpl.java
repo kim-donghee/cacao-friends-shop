@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.item;
+package cacao.friends.shop.modules.item.repository;
 
 import java.util.List;
 
@@ -13,6 +13,9 @@ import com.querydsl.jpa.JPQLQuery;
 import cacao.friends.shop.modules.category.QCategory;
 import cacao.friends.shop.modules.characterKind.QCharacterKind;
 import cacao.friends.shop.modules.delivery.QDelivery;
+import cacao.friends.shop.modules.item.Item;
+import cacao.friends.shop.modules.item.QItem;
+import cacao.friends.shop.modules.item.QItemCategory;
 import cacao.friends.shop.modules.item.search.ItemCondition;
 import cacao.friends.shop.modules.member.Member;
 import cacao.friends.shop.modules.member.QMember;

@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cacao.friends.shop.modules.characterKind.CharacterKindRepository;
 import cacao.friends.shop.modules.characterKind.CharacterOrderSaleDto;
-import cacao.friends.shop.modules.item.ItemRepository;
+import cacao.friends.shop.modules.item.repository.ItemRepository;
 import cacao.friends.shop.modules.item.search.ItemCondition;
 import cacao.friends.shop.modules.item.search.ItemStatus;
 import cacao.friends.shop.modules.order.OrdersRepository;

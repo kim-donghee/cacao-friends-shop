@@ -27,5 +27,9 @@ public class ItemBanner {
 	
 	@ManyToOne
 	private Item item;
+	
+	public boolean equalsImage(String image) {
+		return this.image.equals(image);
+	}
 
 }

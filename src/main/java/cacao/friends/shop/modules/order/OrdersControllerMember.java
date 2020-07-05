@@ -19,7 +19,7 @@ import cacao.friends.shop.modules.cart.CartItem;
 import cacao.friends.shop.modules.cart.CartRepository;
 import cacao.friends.shop.modules.cart.form.CartSearchForm;
 import cacao.friends.shop.modules.item.Item;
-import cacao.friends.shop.modules.item.ItemRepository;
+import cacao.friends.shop.modules.item.repository.ItemRepository;
 import cacao.friends.shop.modules.member.CurrentMember;
 import cacao.friends.shop.modules.member.Member;
 import cacao.friends.shop.modules.order.form.OrderForm;

@@ -11,7 +11,7 @@ import cacao.friends.shop.infra.mail.EmailMessage;
 import cacao.friends.shop.infra.mail.EmailService;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.Item;
-import cacao.friends.shop.modules.item.ItemRepository;
+import cacao.friends.shop.modules.item.repository.ItemRepository;
 import cacao.friends.shop.modules.member.Member;
 import cacao.friends.shop.modules.member.MemberRepository;
 import cacao.friends.shop.modules.notification.NotificationService;

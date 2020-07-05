@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import cacao.friends.shop.modules.cart.form.CartForm;
 import cacao.friends.shop.modules.cart.form.CartSearchForm;
 import cacao.friends.shop.modules.item.Item;
-import cacao.friends.shop.modules.item.ItemRepository;
+import cacao.friends.shop.modules.item.repository.ItemRepository;
 import cacao.friends.shop.modules.member.CurrentMember;
 import cacao.friends.shop.modules.member.Member;
 import lombok.RequiredArgsConstructor;

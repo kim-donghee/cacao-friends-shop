@@ -1,10 +1,11 @@
-package cacao.friends.shop.modules.item;
+package cacao.friends.shop.modules.item.repository;
 
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
+import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.search.ItemCondition;
 import cacao.friends.shop.modules.member.Member;
 

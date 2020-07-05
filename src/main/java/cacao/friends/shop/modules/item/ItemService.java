@@ -13,6 +13,7 @@ import cacao.friends.shop.modules.category.Category;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.event.ItemPublishEvent;
 import cacao.friends.shop.modules.item.form.ItemForm;
+import cacao.friends.shop.modules.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -44,19 +45,13 @@ public class ItemService {
 	}
 	
 	// 배너 삭제
-	public void removeBanner(Item item, Long bannerId) {
-		ItemBanner banner = em
-				.createQuery("SELECT ib FROM ItemBanner ib WHERE ib.id = :id", ItemBanner.class)
-				.setParameter("id", bannerId).getSingleResult();
+	public void removeBanner(Item item, ItemBanner banner) {
 		item.removeBanner(banner);
 	}
 	
 	// 메인 배너 수정
-	public void updateMainBanner(Item item, Long bannerId) {
-		ItemBanner banner = em
-				.createQuery("SELECT ib FROM ItemBanner ib WHERE ib.id = :id", ItemBanner.class)
-				.setParameter("id", bannerId).getSingleResult();
-		item.setMainBanner(banner.getImage());
+	public void updateMainBanner(Item item, ItemBanner banner) {
+		item.updateMainBanner(banner.getImage());
 	}
 	
 	// 카테고리 수정
