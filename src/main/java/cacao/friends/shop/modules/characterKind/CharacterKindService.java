@@ -13,13 +13,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CharacterKindService {
 	
-	private final CharacterKindRepository tagRepository;
+	private final CharacterKindRepository characterKindRepository;
 	
 	private final ModelMapper modelMapper;
 	
 	public void createCharacter(CharacterForm form) {
 		CharacterKind tag = modelMapper.map(form, CharacterKind.class);
-		tagRepository.save(tag);
+		characterKindRepository.save(tag);
 	}
 	
 	public void updateCharacter(CharacterKind character, CharacterForm form) {
@@ -27,20 +27,7 @@ public class CharacterKindService {
 	}
 
 	public void removeCharacter(CharacterKind character) {
-		tagRepository.delete(character);
-	}
-	
-	public boolean isValid(CharacterForm form) {
-		String name = form.getName();
-		String image = form.getImage();
-		
-		int nameLength = name.length();
-		
-		if(name == null || image == null || nameLength < 1 || nameLength > 50 || image.isEmpty()) {
-			return false;
-		}
-		
-		return true;
+		characterKindRepository.delete(character);
 	}
 
 }

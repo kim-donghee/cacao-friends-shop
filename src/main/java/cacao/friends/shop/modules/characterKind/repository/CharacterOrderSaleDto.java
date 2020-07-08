@@ -1,4 +1,4 @@
-package cacao.friends.shop.modules.characterKind;
+package cacao.friends.shop.modules.characterKind.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

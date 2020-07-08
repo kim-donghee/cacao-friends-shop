@@ -9,7 +9,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 
 import cacao.friends.shop.modules.characterKind.CharacterKind;
-import cacao.friends.shop.modules.characterKind.CharacterOrderSaleDto;
 import cacao.friends.shop.modules.characterKind.QCharacterKind;
 import cacao.friends.shop.modules.item.QItem;
 import cacao.friends.shop.modules.order.OrderStatus;

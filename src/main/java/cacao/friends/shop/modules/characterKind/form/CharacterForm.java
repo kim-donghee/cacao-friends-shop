@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class CharacterForm {
 	
-	@Length(min = 1, max = 20)
+	@Length(min = 1, max = 50)
 	private String name;
 	
 	@NotBlank
