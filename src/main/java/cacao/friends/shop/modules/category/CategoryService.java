@@ -1,5 +1,8 @@
 package cacao.friends.shop.modules.category;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,13 +37,18 @@ public class CategoryService {
 		repo.delete(category);
 	}
 	
-	public boolean isValid(String name) {
-		int nameLength = name.length();
-		
-		if(name == null || nameLength < 2 || nameLength > 50)
-			return false;
-		
-		return true;
+	public List<CategoryReturnDto> topCategories() {
+		return toDto(repo.findByParentCategoryIsNull());
+	}
+	
+	public List<CategoryReturnDto> subCategories(Long parentId) {
+		return toDto(repo.findByParentCategoryId(parentId));
+	}
+	
+	private List<CategoryReturnDto> toDto(List<Category> categories) {
+		List<CategoryReturnDto> returnDtoList = 
+				categories.stream().map(c -> modelMapper.map(c, CategoryReturnDto.class)).collect(Collectors.toList());
+		return returnDtoList;
 	}
 
 }
