@@ -51,13 +51,13 @@ public class MemberService  implements UserDetailsService {
 	public Member saveNewAccount(JoinForm joinForm) {
 		joinForm.setPassword(passwordEncoder.encode(joinForm.getPassword()));
 		Member member = modelMapper.map(joinForm, Member.class);
-		member.generateEmailToken();
 		Member newMember = memberRepository.save(member);
 		sendJoinConfirmEmail(newMember);
 		return newMember;
 	}
 	
 	public void sendJoinConfirmEmail(Member member) {
+		member.generateEmailToken();
 		memberSendEmail.sendJoinConfirmEmail(member);
 	}
 	

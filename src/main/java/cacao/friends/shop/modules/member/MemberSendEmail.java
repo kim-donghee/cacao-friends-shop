@@ -17,22 +17,25 @@ public class MemberSendEmail {
 	
 	private final EmailText emailText;
 	
-	public void sendEmail(String username, String email, String subject, String link, String linkName, String message) {
-		String text = emailText.create(username, link, linkName, message);
-		EmailMessage emailMessage = new EmailMessage(email, subject, text);
-		emailService.sendEmail(emailMessage);
-	}
-	
 	public void sendJoinConfirmEmail(Member member) {
-		sendEmail(member.getUsername(), member.getEmail(), "Cacao Friends Shop, 회원 가입 인증", 
+		String text = emailText.create(member.getUsername(),
 				"/member/check-email-token?token=" + member.getEmailCheckToken() + "&email=" + member.getEmail(), 
 				"이메일 인증하기", "서비스를 사용하려면 '이메일 인증하기'를 클릭해주세요.");
+		String subject = "Cacao Friends Shop, 회원 가입 인증";
+		sendEmail(member, text, subject);
 	}
 	
 	public void sendLoginLink(Member member) {
-		sendEmail(member.getUsername(), member.getEmail(), "Cacao Friends Shop, 로그인 링크", 
-				"/member/login-by-email?token=" + member.getEmailCheckToken() + "&email=" + member.getEmail(), 
+		String text = emailText.create(member.getUsername(),
+				"/member/login-by-email?token=" + member.getEmailCheckToken() + "&email=" + member.getEmail(),
 				"로그인 링크", "Cacao Friends Shop에 로그인 하려면 '로그인 링크'를 클릭해주세요.");
+		String subject = "Cacao Friends Shop, 로그인 링크";
+		sendEmail(member, text, subject);
+	}
+	
+	private void sendEmail(Member member, String text, String subject) {
+		EmailMessage emailMessage = new EmailMessage(member.getEmail(), subject, text);
+		emailService.sendEmail(emailMessage);
 	}
 
 }

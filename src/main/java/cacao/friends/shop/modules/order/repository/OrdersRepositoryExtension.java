@@ -1,9 +1,10 @@
-package cacao.friends.shop.modules.order;
+package cacao.friends.shop.modules.order.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import cacao.friends.shop.modules.order.Orders;
 import cacao.friends.shop.modules.order.search.OrdersCondition;
 
 @Transactional(readOnly = true)

@@ -12,6 +12,7 @@ import cacao.friends.shop.modules.member.Member;
 import cacao.friends.shop.modules.order.event.DirectSheetOrderEvent;
 import cacao.friends.shop.modules.order.event.SheetOrderEvent;
 import cacao.friends.shop.modules.order.form.OrderForm;
+import cacao.friends.shop.modules.order.repository.OrdersRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

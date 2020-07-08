@@ -18,7 +18,7 @@ import cacao.friends.shop.modules.characterKind.repository.CharacterKindReposito
 import cacao.friends.shop.modules.item.repository.ItemRepository;
 import cacao.friends.shop.modules.item.search.ItemCondition;
 import cacao.friends.shop.modules.item.search.ItemStatus;
-import cacao.friends.shop.modules.order.OrdersRepository;
+import cacao.friends.shop.modules.order.repository.OrdersRepository;
 import cacao.friends.shop.modules.order.search.OrdersCondition;
 import cacao.friends.shop.modules.order.search.OrdersSearchForm;
 import cacao.friends.shop.modules.question.QuestionRepository;
