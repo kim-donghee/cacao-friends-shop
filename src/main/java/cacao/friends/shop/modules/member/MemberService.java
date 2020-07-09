@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
+import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
 import cacao.friends.shop.modules.member.form.JoinForm;
 import cacao.friends.shop.modules.member.form.NotificationsForm;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +29,11 @@ public class MemberService  implements UserDetailsService {
 	
 	private final MemberRepository repo;
 	
-	private final ModelMapper modelMapper;
+	private final CharacterKindRepository characterKindRepository;
 	
 	private final MemberSendEmail memberSendEmail;
+	
+	private final ModelMapper modelMapper;
 	
 	private final PasswordEncoder passwordEncoder;
 	
@@ -65,12 +68,14 @@ public class MemberService  implements UserDetailsService {
 	public void sendJoinConfirmEmail(Member member) {
 		member.generateEmailToken();
 		memberSendEmail.sendJoinConfirmEmail(member);
+		repo.save(member);
 	}
 	
 	// 이메일 로그인 이메일 전송(패스워드 없이 로그인하기 위해 가입한 이메일에 토큰 전송)
 	public void sendLoginLink(Member member) {
 		member.generateEmailToken();
 		memberSendEmail.sendLoginLink(member);
+		repo.save(member);
 	}
 	
 	public void login(Member member) {

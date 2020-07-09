@@ -29,8 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SettingMemberController {
 	
-//	private final MemberRepository memberRepository;
-	
 	private final MemberService memberService;
 	
 	private final PasswordFormValidator passwordFormValidator;
@@ -65,11 +63,8 @@ public class SettingMemberController {
 		if(errors.hasErrors()) {
 			return "member/account/settings/address";
 		}
-		
 		memberService.updateAddress(member, addressForm);
-		
 		attributes.addFlashAttribute("message", "주소를 수정했습니다.");
-		
 		return "redirect:/member/settings/address";
 	}
 	
@@ -85,11 +80,8 @@ public class SettingMemberController {
 		if(errors.hasErrors()) {
 			return "member/account/settings/password";
 		}
-		
 		memberService.updatePassword(member, passwordForm.getNewPassword());
-		
 		attributes.addFlashAttribute("message", "패스워드를 수정했습니다.");
-		
 		return "redirect:/member/settings/password";
 	}
 	
