@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter @Setter @EqualsAndHashCode(of = { "id" })
 @NoArgsConstructor @AllArgsConstructor @Builder 
 public class ItemCategory {
 	

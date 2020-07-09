@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService  implements UserDetailsService {
 	
-	private final MemberRepository memberRepository;
+	private final MemberRepository repo;
 	
 	private final ModelMapper modelMapper;
 	
@@ -36,9 +36,9 @@ public class MemberService  implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String emailOrUsername) throws UsernameNotFoundException {
-		Member member = memberRepository.findByUsername(emailOrUsername);
+		Member member = repo.findByUsername(emailOrUsername);
 		if(member == null) {
-			member = memberRepository.findByEmail(emailOrUsername);
+			member = repo.findByEmail(emailOrUsername);
 		}
 		if(member == null) {
 			throw new UsernameNotFoundException(emailOrUsername);
@@ -47,21 +47,27 @@ public class MemberService  implements UserDetailsService {
 		return new UserMember(member);
 	}
 	
-	// 저장 -> 메시지 전송
-	public Member saveNewAccount(JoinForm joinForm) {
-		joinForm.setPassword(passwordEncoder.encode(joinForm.getPassword()));
-		Member member = modelMapper.map(joinForm, Member.class);
-		Member newMember = memberRepository.save(member);
+	// 회원가입 과정 (저장 -> 메시지 전송)
+	public Member joinProcess(JoinForm joinForm) {
+		Member newMember = saveNewMember(joinForm);
 		sendJoinConfirmEmail(newMember);
 		return newMember;
 	}
 	
+	private Member saveNewMember(JoinForm joinForm) {
+		joinForm.setPassword(passwordEncoder.encode(joinForm.getPassword()));
+		Member member = modelMapper.map(joinForm, Member.class);
+		Member newMember = repo.save(member);
+		return newMember;
+	}
+	
+	// 회원가입 확인 메시지
 	public void sendJoinConfirmEmail(Member member) {
 		member.generateEmailToken();
 		memberSendEmail.sendJoinConfirmEmail(member);
 	}
 	
-	// 패스워드 없이 로그인하기 위해 가입한 이메일에 토큰을 만들어서 전송
+	// 이메일 로그인 이메일 전송(패스워드 없이 로그인하기 위해 가입한 이메일에 토큰 전송)
 	public void sendLoginLink(Member member) {
 		member.generateEmailToken();
 		memberSendEmail.sendLoginLink(member);
@@ -80,20 +86,26 @@ public class MemberService  implements UserDetailsService {
 		member.completeJoin();
 	}
 	
+	public boolean validToken(Member member, String token) {
+		if(member == null)
+			return false;
+		return member.isValidToken(token);
+	}
+	
 	public void updateAddress(Member member, AddressForm addressForm) {
 		member.updateAddress(addressForm);
-		memberRepository.save(member);
+		repo.save(member);
 	}
 	
 	public void updatePassword(Member member, String newPassword) {
 		member.setPassword(passwordEncoder.encode(newPassword));
-		memberRepository.save(member);
+		repo.save(member);
 	}
 	
 	public void updateNotifications(Member member, CharacterKind pickCharacter, NotificationsForm notificationsForm) {
 		modelMapper.map(notificationsForm, member);
 		member.setPickCharacter(pickCharacter);
-		memberRepository.save(member);
+		repo.save(member);
 	}
 
 }

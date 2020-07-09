@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cacao.friends.shop.modules.category.dto.CategoryDto;
 import cacao.friends.shop.modules.category.dto.CategoryReturnDto;
 import lombok.RequiredArgsConstructor;
 
@@ -19,21 +20,25 @@ public class CategoryService {
 	
 	private final ModelMapper modelMapper;
 	
-	public CategoryReturnDto createTopCategory(String name) {
-		Category saveCategory = repo.save(Category.builder().name(name).build());
+	public CategoryReturnDto createTopCategory(CategoryDto dto) {
+		Category saveCategory = repo.save(modelMapper.map(dto, Category.class));
 		return modelMapper.map(saveCategory, CategoryReturnDto.class);
 	}
 	
-	public CategoryReturnDto createSubCategory(Category parentCategory, String name) {
-		Category saveCategory = repo.save(Category.builder().parentCategory(parentCategory).name(name).build());
+	public CategoryReturnDto createSubCategory(Long parentId, CategoryDto dto) {
+		Category parentCategory = findById(parentId);
+		Category saveCategory = repo.save(
+				Category.builder().parentCategory(parentCategory).name(dto.getName()).build());
 		return modelMapper.map(saveCategory, CategoryReturnDto.class);
 	}
 	
-	public void updateCategory(Category category, String name) {
-		category.setName(name);
+	public void updateCategory(Long id, CategoryDto dto) {
+		Category category = findById(id);
+		modelMapper.map(dto, category);		
 	}
 	
-	public void removeCategory(Category category) {
+	public void removeCategory(Long id) {
+		Category category = findById(id);
 		repo.delete(category);
 	}
 	
@@ -43,6 +48,11 @@ public class CategoryService {
 	
 	public List<CategoryReturnDto> subCategories(Long parentId) {
 		return toDto(repo.findByParentCategoryId(parentId));
+	}
+	
+	private Category findById(Long id) {
+		return repo.findById(id).orElseThrow(() 
+				-> new IllegalArgumentException("해당하는 카테고리가 존재하지 않습니다."));
 	}
 	
 	private List<CategoryReturnDto> toDto(List<Category> categories) {

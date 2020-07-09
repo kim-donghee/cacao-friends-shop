@@ -24,8 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/manager/category")
 public class CategoryControllerManager {
 	
-	private final CategoryRepository categoryRepository;
-	
 	private final CategoryService categoryService;
 	
 	@GetMapping
@@ -38,16 +36,14 @@ public class CategoryControllerManager {
 	public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody @Valid CategoryDto dto, Errors errors) {
 		if(errors.hasErrors()) 
 			throw new IllegalArgumentException();
-		Category findCategory = findById(id);
-		categoryService.updateCategory(findCategory, dto.getName());
+		categoryService.updateCategory(id, dto);
 		return ResponseEntity.ok().build();
 	}
 	
 	@PostMapping(value = "/remove/{id}", 
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> removeCategory(@PathVariable Long id) {
-		Category findCategory = findById(id);
-		categoryService.removeCategory(findCategory);
+		categoryService.removeCategory(id);
 		return ResponseEntity.ok().build();
 	}
 	
@@ -64,7 +60,7 @@ public class CategoryControllerManager {
 	public ResponseEntity<CategoryReturnDto> saveTopCategory(@RequestBody @Valid CategoryDto dto, Errors errors) {
 		if(errors.hasErrors()) 
 			throw new IllegalArgumentException();
-		return ResponseEntity.ok(categoryService.createTopCategory(dto.getName()));
+		return ResponseEntity.ok(categoryService.createTopCategory(dto));
 	}
 	
 	//=== 2차 분류 카테고리 ===//
@@ -81,13 +77,7 @@ public class CategoryControllerManager {
 			@RequestBody @Valid CategoryDto dto, Errors errors) {
 		if(errors.hasErrors()) 
 			throw new IllegalArgumentException();
-		Category parentCategory = findById(parentId);
-		return ResponseEntity.ok(categoryService.createSubCategory(parentCategory, dto.getName()));
-	}
-	
-	private Category findById(Long id) {
-		return categoryRepository.findById(id).orElseThrow(() 
-				-> new IllegalArgumentException("해당하는 카테고리가 존재하지 않습니다."));
+		return ResponseEntity.ok(categoryService.createSubCategory(parentId, dto));
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)

@@ -25,9 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberController {
 	
-	private final MemberService memberService;
-	
 	private final MemberRepository memberRepository;
+	
+	private final MemberService memberService;
 	
 	private final JoinFormValidator joinFormValidator;
 	
@@ -47,46 +47,37 @@ public class MemberController {
 		return "member/account/join";
 	}
 	
-	/**
-	 * 회원 가입 -> 로그인
-	 */
+	// 회원 가입 처리 -> 로그인
 	@PostMapping("/join")
 	public String joinSubmit(@Valid JoinForm joinForm, Errors errors) {
 		if(errors.hasErrors()) {
 			return "member/account/join";
 		}
-		Member member = memberService.saveNewAccount(joinForm);
-		memberService.login(member);
+		Member newMember = memberService.joinProcess(joinForm);
+		memberService.login(newMember);
 		return "redirect:/";
 	}
 	
-	/*
-	 * 가입 이메일 다시보내기
-	*/
+	// 이메일 가입 토큰 재전송
 	@GetMapping("/resend-join-confirm-email")
 	public String resendJoinConfirmEmail(@CurrentMember Member member) {
 		memberService.sendJoinConfirmEmail(member);
 		return "redirect:/member/settings/profile";
 	}
 	
-	/**
-	 * 이메일, 토큰 정보를 확인 후 이메일 인증 계정으로 수정과 로그인
-	 */
+	// 이메일 인증 처리 -> 로그인
 	@GetMapping("/check-email-token")
-	public String checkEmailToken(String token, String email, Model model) {
+	public String checkEmailToken(String email, String token, Model model) {
 		Member member = memberRepository.findByEmail(email);
-		String view = "member/account/check-email-token";
-		
-		if(member == null || !member.isValidToken(token)) {
+		if(!memberService.validToken(member, token)) {
 			model.addAttribute("error", "이메일 확인 링크가 정확하지 않습니다.");
-			return view;
+			return "member/account/check-email-token";
 		}
-		
 		memberService.completeJoin(member);
 		memberService.login(member);
 		model.addAttribute("numberOfUser", memberRepository.countByEmailVerified(true));
 		model.addAttribute("username", member.getUsername());
-		return view;
+		return "member/account/check-email-token";
 	}
 	
 	@GetMapping("/email-login")
@@ -94,13 +85,10 @@ public class MemberController {
 		return "member/account/email-login";
 	}
 	
-	/**
-	 * 회원가입시에 입력한 이메일에 토큰 정보를 전송
-	 */
+	// 이메일에 로그인 토큰 전송
 	@PostMapping("/email-login")
 	public String emailLoginSubmit(String email, Model model, RedirectAttributes attributes) {
 		Member member = memberRepository.findByEmail(email);
-		
 		if(member == null) {
 			model.addAttribute("error", "유효한 이메일 주소가 아닙니다.");
 			return "member/account/email-login";
@@ -110,20 +98,16 @@ public class MemberController {
 		return "redirect:/member/email-login";
 	}
 	
-	/**
-	 * 이메일과 토큰 정보를 확인 후에 로그인
-	 */
+	// 토큰 정보 확인후 로그인
 	@GetMapping("/login-by-email")
-	public String loginByEmail(String token, String email, Model model) {
+	public String loginByEmail(String email, String token, Model model) {
 		Member member = memberRepository.findByEmail(email);
-		String view = "member/account/logged-in-by-email";
-		
-		if(member == null || !member.isValidToken(token)) {
+		if(!memberService.validToken(member, token)) {
 			model.addAttribute("error", "유효한 이메일 주소가 아닙니다.");
-			return view;
+			return "member/account/logged-in-by-email";
 		}
 		memberService.login(member);
-		return view;
+		return "member/account/logged-in-by-email";
 	}
 
 }

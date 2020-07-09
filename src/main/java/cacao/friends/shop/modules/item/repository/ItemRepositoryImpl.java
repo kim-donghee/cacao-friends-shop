@@ -62,7 +62,7 @@ public class ItemRepositoryImpl extends QuerydslRepositorySupport implements Ite
 		if(condition.getCategoryId() != null) {
 			QItemCategory itemCategory = QItemCategory.itemCategory;
 			QCategory category = QCategory.category;
-			query.leftJoin(item.itemCategorys, itemCategory);
+			query.leftJoin(item.itemCategories, itemCategory);
 			query.leftJoin(itemCategory.category, category);
 			
 			query.distinct();

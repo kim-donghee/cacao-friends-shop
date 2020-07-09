@@ -54,7 +54,7 @@ public class SettingsItemControllerManager {
 	// 상품 정보 수정
 	@GetMapping("/{id}/info")
 	public String updateItemForm(@PathVariable Long id, Model model) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		model.addAttribute(id);
 		model.addAttribute(modelMapper.map(item, ItemForm.class));
 		return "manager/item/info";
@@ -67,10 +67,8 @@ public class SettingsItemControllerManager {
 			model.addAttribute(id);
 			return "manager/item/info";
 		}
-
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		itemService.updateItem(item, itemForm);
-
 		attributes.addFlashAttribute("message", "상품 정보를 수정했습니다.");
 		return "redirect:/manager/item/" + id + "/info";
 	}
@@ -117,7 +115,7 @@ public class SettingsItemControllerManager {
 	// 상품 캐릭터 수정
 	@GetMapping("/{id}/character")
 	public String updateCharacterForm(@PathVariable Long id, Model model) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		List<CharacterKind> characterList = characterKindRepository.findAll();
 		model.addAttribute(id);
 		model.addAttribute(item);
@@ -127,7 +125,7 @@ public class SettingsItemControllerManager {
 
 	@PostMapping("/{id}/character")
 	public String updateCharacter(@PathVariable Long id, Long characterId, Model model, RedirectAttributes attributes) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		CharacterKind character = characterKindRepository.findById(characterId)
 				.orElseThrow(() -> new IllegalArgumentException("해당하는 캐릭터가 없습니다."));
 		itemService.updateCharacter(item, character);
@@ -138,9 +136,9 @@ public class SettingsItemControllerManager {
 	// 상품 카테고리 수정
 	@GetMapping("/{id}/category")
 	public String updateCategoryForm(@PathVariable Long id, Model model) throws JsonProcessingException {
-		Item item = itemRepository.findWithCategorysById(id);
+		Item item = itemRepository.findWithCategoriesById(id);
 		List<Category> categoryList = categoryRepository.findAllWithChildBy();
-		List<Long> currentCategoryList = item.getItemCategorys().stream().map(ItemCategory::getCategory)
+		List<Long> currentCategoryList = item.getItemCategories().stream().map(ItemCategory::getCategory)
 				.map(Category::getId).collect(Collectors.toList());
 		model.addAttribute(id);
 		model.addAttribute(item);
@@ -167,7 +165,7 @@ public class SettingsItemControllerManager {
 	// 상품 상태 수정
 	@GetMapping("/{id}/item")
 	public String updateStatusForm(@PathVariable Long id, Model model) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		model.addAttribute(id);
 		model.addAttribute(item);
 		return "manager/item/item";
@@ -175,7 +173,7 @@ public class SettingsItemControllerManager {
 
 	@PostMapping("/{id}/publish")
 	public String publishItem(@PathVariable Long id, RedirectAttributes attributes) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		itemService.publish(item);
 		attributes.addFlashAttribute("message", "상품을 공개했습니다.");
 		return "redirect:/manager/item/" + id + "/item";
@@ -183,7 +181,7 @@ public class SettingsItemControllerManager {
 
 	@PostMapping("/{id}/close")
 	public String closeItem(@PathVariable Long id, RedirectAttributes attributes) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		itemService.close(item);
 		attributes.addFlashAttribute("message", "상품을 판매 종료했습니다.");
 		return "redirect:/manager/item/" + id + "/item";
@@ -191,7 +189,7 @@ public class SettingsItemControllerManager {
 
 	@PostMapping("/{id}/pause")
 	public String pauseItem(@PathVariable Long id, RedirectAttributes attributes) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		itemService.pause(item);
 		attributes.addFlashAttribute("message", "상품을 판매 정지했습니다.");
 		return "redirect:/manager/item/" + id + "/item";
@@ -199,13 +197,13 @@ public class SettingsItemControllerManager {
 
 	@PostMapping("/{id}/resume")
 	public String resumeItem(@PathVariable Long id, RedirectAttributes attributes) {
-		Item item = itemFindById(id);
+		Item item = findById(id);
 		itemService.resum(item);
 		attributes.addFlashAttribute("message", "상품을 다시 공개했습니다.");
 		return "redirect:/manager/item/" + id + "/item";
 	}
 
-	private Item itemFindById(Long id) {
+	private Item findById(Long id) {
 		return itemRepository.findById(id).orElseThrow(() 
 				-> new IllegalArgumentException("해당하는 상품이 없습니다."));
 	}

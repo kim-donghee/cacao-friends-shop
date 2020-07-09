@@ -55,12 +55,12 @@ public class ItemService {
 	}
 	
 	// 카테고리 수정
-	public void updateCategorys(Item item, List<Category> categorys) {
+	public void updateCategorys(Item item, List<Category> categories) {
 		em
 		.createQuery("DELETE FROM ItemCategory ic WHERE item_id = :item_id")
 		.setParameter("item_id", item.getId()).executeUpdate();
 		
-		categorys.forEach(c -> {
+		categories.forEach(c -> {
 			ItemCategory itemCategory = ItemCategory.builder()
 					.item(item)
 					.category(c)

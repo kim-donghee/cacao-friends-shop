@@ -16,8 +16,8 @@ public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositor
 	@EntityGraph(attributePaths = { "banners" })
 	Item findWithBannersById(Long id);
 	
-	@EntityGraph(attributePaths = { "itemCategorys" })
-	Item findWithCategorysById(Long id);
+	@EntityGraph(attributePaths = { "itemCategories" })
+	Item findWithCategoriesById(Long id);
 	
 	@Modifying(clearAutomatically = true)
 	@Query(value = "DELETE FROM item WHERE published = false", nativeQuery = true)

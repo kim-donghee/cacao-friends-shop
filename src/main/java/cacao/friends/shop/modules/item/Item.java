@@ -67,7 +67,7 @@ public class Item {
 	
 	@OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
-	private Set<ItemCategory> itemCategorys = new HashSet<>();
+	private Set<ItemCategory> itemCategories = new HashSet<>();
 	
 	//=== 상품 상태 ===//
 	@Builder.Default
@@ -130,57 +130,45 @@ public class Item {
 	
 	// 카테고리 추가
 	public void addCategory(ItemCategory itemCategory) {
-		this.itemCategorys.add(itemCategory);
+		this.itemCategories.add(itemCategory);
 		itemCategory.setItem(this);
 	}
 	
 	// 카테고리 삭제
 	public void removeCategory(ItemCategory itemCategory) {
-		this.itemCategorys.remove(itemCategory);
+		this.itemCategories.remove(itemCategory);
 		itemCategory.setItem(null);
 	}
 	
 	// 상품 공개
 	public void publish() {
-		if(!this.published && !this.closed) {
-			this.published = true;
-			this.publishedDateTime = LocalDateTime.now();
-		}
-		else {
+		if(this.published || this.closed) 
 			throw new RuntimeException("상품을 공개할 수 없는 상태입니다. 상품이 이미 공개되었거나 판매 종료되었습니다.");
-		}
+		this.published = true;
+		this.publishedDateTime = LocalDateTime.now();
 	}
 	
 	// 상품 판매 종료
 	public void close() {
-		if(this.published && !this.closed) {
-			this.closed = true;
-			this.closedDateTime = LocalDateTime.now();
-		}
-		else {
+		if(!this.published || this.closed) 
 			throw new RuntimeException("상품을 판매 종료할 수 없는 상태입니다. 상품이 공개되지않았거나 이미 판매 종료되었습니다.");
-		}
+		this.closed = true;
+		this.closedDateTime = LocalDateTime.now();
 	}
 	
 	// 상품 판매 정지
 	public void pause() {
-		if(!this.paused) {
-			this.paused = true;
-			this.pausedDateTime = LocalDateTime.now();
-		}
-		else {
+		if(this.paused) 
 			throw new RuntimeException("상품을 판매 일시 정지할 수 없는 상태입니다. 상품이 이미 판매 정지입니다.");
-		}
+		this.paused = true;
+		this.pausedDateTime = LocalDateTime.now();
 	}
 	
 	// 상품 판매 정지 -> 재개
 	public void resum() {
-		if(this.paused) {
-			this.paused = false;
-		}
-		else {
+		if(!this.paused)
 			throw new RuntimeException("상품을 판매할 수 없는 상태입니다. 상품이 이미 판매 중입니다.");
-		}
+		this.paused = false;
 	}
 
 }
