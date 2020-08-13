@@ -42,22 +42,31 @@ public class ItemEventListener {
 		
 		members.forEach(m -> {
 			if(m.isItemCreatedByWeb()) {
-				notificationService.createNotification(m, "새로운 상품이 출시했습니다.", item.getName(), 
-						"/item/" + item.getId());
+				createNotification(m, item);
 			}
 			
 			if(m.isItemCreatedByEmail()) {
-				String username = m.getUsername();
-				String email = m.getEmail();
-				String subject = "새로운 상품이 출시했습니다. " + item.getName();
-				String link = "/item/" + item.getId();
-				String linkName = item.getName();
-				String message = "새로운 상품 '" + item.getName() + "' 을 눌러서 확인하세요.";
-				
-				EmailMessage emailMessage = 
-						emailMessageCreator.create(username, email, subject, link, linkName, message);
-				emailService.sendEmail(emailMessage);
+				sendEmail(m, item);
 			}
 		});
 	}
+	
+	private void createNotification(Member member, Item item) {
+		notificationService.createNotification(member, "새로운 상품이 출시했습니다.", 
+				item.getName(), "/item/" + item.getId());
+	}
+	
+	private void sendEmail(Member member, Item item) {
+		String username = member.getUsername();
+		String email = member.getEmail();
+		String subject = "새로운 상품이 출시했습니다. " + item.getName();
+		String link = "/item/" + item.getId();
+		String linkName = item.getName();
+		String message = "새로운 상품 '" + item.getName() + "' 을 눌러서 확인하세요.";
+		
+		EmailMessage emailMessage = 
+				emailMessageCreator.create(username, email, subject, link, linkName, message);
+		emailService.sendEmail(emailMessage);
+	}
+	
 }
