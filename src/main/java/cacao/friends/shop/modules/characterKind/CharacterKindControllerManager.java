@@ -32,7 +32,7 @@ public class CharacterKindControllerManager {
 	}
 	
 	@PostMapping("/save")
-	public String createTag(@Valid CharacterForm form, Errors errors, RedirectAttributes attributes) {
+	public String createCharacterKind(@Valid CharacterForm form, Errors errors, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
 			attributes.addFlashAttribute("error", "캐릭터 저장에 실패했습니다." + validMessage);
 			return redirectView;
@@ -43,7 +43,7 @@ public class CharacterKindControllerManager {
 	}
 	
 	@PostMapping("/{id}/update")
-	public String updateTag(@PathVariable Long id, @Valid CharacterForm form, Errors errors, RedirectAttributes attributes) {
+	public String updateCharacterKind(@PathVariable Long id, @Valid CharacterForm form, Errors errors, RedirectAttributes attributes) {
 		if(errors.hasErrors()) {
 			attributes.addFlashAttribute("error", "캐릭터 수정에 실패했습니다." + validMessage);
 			return redirectView;
@@ -54,7 +54,7 @@ public class CharacterKindControllerManager {
 	}
 
 	@PostMapping("/{id}/remove")
-	public String updateTag(@PathVariable Long  id, RedirectAttributes attributes) {
+	public String updateCharacterKind(@PathVariable Long  id, RedirectAttributes attributes) {
 		characterService.removeCharacter(id);
 		attributes.addFlashAttribute("message", "캐릭터를 삭제했습니다.");
 		return redirectView;

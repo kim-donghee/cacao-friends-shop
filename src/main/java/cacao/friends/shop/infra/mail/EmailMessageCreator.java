@@ -9,13 +9,18 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class EmailText {
+public class EmailMessageCreator {
 	
 	private final TemplateEngine templateEngine;
 	
 	private final AppProperties appProperties;
 
-	public String create(String username, String link, String linkName, String message) {
+	public EmailMessage create(String username, String email, String subject, 
+			String link, String linkName, String message) {
+		return new EmailMessage(email, subject, getText(username, link, linkName, message));	
+	}
+	
+	private String getText(String username, String link, String linkName, String message) {
 		Context context = new Context();
 		context.setVariable("username", username);
 		context.setVariable("link", link);

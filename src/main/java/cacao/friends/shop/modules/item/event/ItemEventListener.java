@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.infra.mail.EmailMessage;
 import cacao.friends.shop.infra.mail.EmailService;
-import cacao.friends.shop.infra.mail.EmailText;
+import cacao.friends.shop.infra.mail.EmailMessageCreator;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
 import cacao.friends.shop.modules.item.Item;
 import cacao.friends.shop.modules.item.repository.ItemRepository;
@@ -32,7 +32,7 @@ public class ItemEventListener {
 	
 	private final EmailService emailService;
 	
-	private final EmailText emailText;
+	private final EmailMessageCreator emailMessageCreator;
 	
 	@EventListener
 	public void handlerItemPublishEvent(ItemPublishEvent event) {
@@ -47,11 +47,15 @@ public class ItemEventListener {
 			}
 			
 			if(m.isItemCreatedByEmail()) {
-				String text = emailText.create(m.getUsername(), "/item/" + item.getId(), 
-						item.getName(), "새로운 상품 '" + item.getName() + "' 을 눌러서 확인하세요.");
+				String username = m.getUsername();
+				String email = m.getEmail();
+				String subject = "새로운 상품이 출시했습니다. " + item.getName();
+				String link = "/item/" + item.getId();
+				String linkName = item.getName();
+				String message = "새로운 상품 '" + item.getName() + "' 을 눌러서 확인하세요.";
 				
 				EmailMessage emailMessage = 
-						new EmailMessage(m.getEmail(), "새로운 상품이 출시했습니다. " + item.getName(), text);
+						emailMessageCreator.create(username, email, subject, link, linkName, message);
 				emailService.sendEmail(emailMessage);
 			}
 		});

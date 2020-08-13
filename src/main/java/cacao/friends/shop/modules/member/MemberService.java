@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cacao.friends.shop.modules.address.form.AddressForm;
 import cacao.friends.shop.modules.characterKind.CharacterKind;
-import cacao.friends.shop.modules.characterKind.repository.CharacterKindRepository;
 import cacao.friends.shop.modules.member.form.JoinForm;
 import cacao.friends.shop.modules.member.form.NotificationsForm;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +27,6 @@ import lombok.RequiredArgsConstructor;
 public class MemberService  implements UserDetailsService {
 	
 	private final MemberRepository repo;
-	
-	private final CharacterKindRepository characterKindRepository;
 	
 	private final MemberSendEmail memberSendEmail;
 	

@@ -36,7 +36,7 @@ public class AccountServiceTest {
 		joinForm.setPassword("12345678");
 		joinForm.setEmail("dong@dong.com");
 		
-		Member newAccount = memberService.saveNewAccount(joinForm);
+		Member newAccount = memberService.joinProcess(joinForm);
 		
 		memberService.completeJoin(newAccount);
 		
@@ -51,7 +51,7 @@ public class AccountServiceTest {
 		joinForm.setPassword("12345678");
 		joinForm.setEmail("dong@dong.com");
 		
-		Member newAccount = memberService.saveNewAccount(joinForm);
+		Member newAccount = memberService.joinProcess(joinForm);
 		
 		em.flush();
 		em.clear();
